@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.pojos.Message;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ import java.util.List;
  */
 public class MessagesAdapter extends BaseAdapter {
 
-    private List<SmsMessage> mData;
+    private List<Message> mData;
     private LayoutInflater mInflater;
 
-    public MessagesAdapter(Context c, List<SmsMessage> data) {
+    public MessagesAdapter(Context c, List<Message> data) {
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mData = data;
     }
@@ -34,7 +35,7 @@ public class MessagesAdapter extends BaseAdapter {
     }
 
     @Override
-    public SmsMessage getItem(int position) {
+    public Message getItem(int position) {
         return mData.get(position);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -43,7 +44,7 @@ public class MessagesAdapter extends BaseAdapter {
         return position;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addMessage(SmsMessage msg) {
+    public void addMessage(Message msg) {
         mData.add(msg);
         notifyDataSetChanged();
     }
@@ -62,8 +63,8 @@ public class MessagesAdapter extends BaseAdapter {
             holder = (ViewHolder) vi.getTag();
         }
 
-        SmsMessage item = getItem(position);
-        holder.message.setText(item.getDisplayMessageBody());
+        Message item = getItem(position);
+        holder.message.setText(item.getMessage());
 
         return vi;
     }

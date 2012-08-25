@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Contact;
+import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.providers.ContactProvider;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
@@ -29,11 +30,11 @@ public class MessageFragment extends Fragment {
     private String mIdSender;
     private ListView mListView;
     private MessagesAdapter mAdapter;
-    private List<SmsMessage> mInitData;
+    private List<Message> mInitData;
     private LinearLayout mActionbar;
     private Contact mContact;
 
-    public MessageFragment(String sender, List<SmsMessage> data) {
+    public MessageFragment(String sender, List<Message> data) {
         mInitData = data;
         mIdSender = sender;
     }
@@ -78,11 +79,11 @@ public class MessageFragment extends Fragment {
 
 
     private void initAdapter() {
-        List<SmsMessage> list = new ArrayList<SmsMessage>();
+        List<Message> list = new ArrayList<Message>();
         mAdapter = new MessagesAdapter(getActivity(), mInitData);
     }
 
-    public void addSms(SmsMessage msg) {
+    public void addSms(Message msg) {
         mAdapter.addMessage(msg);
         mListView.smoothScrollToPosition(mAdapter.getCount());
     }

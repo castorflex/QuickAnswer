@@ -21,7 +21,7 @@ public class Message {
 
         for(int i = 0 ; i < messages.length ; ++i)
         {
-            message += messages[i];
+            message += messages[i].getDisplayMessageBody();
         }
     }
 

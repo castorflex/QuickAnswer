@@ -10,6 +10,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import fr.castorflex.android.quickanswer.pojos.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +34,10 @@ public class FragmentPagerAdapter extends PagerAdapter {
     public ArrayList<MessageFragment> mFragments = new ArrayList<MessageFragment>();
     private Fragment mCurrentPrimaryItem = null;
 
-    HashMap<String, List<SmsMessage>> mData;
+    HashMap<String, List<Message>> mData;
     List<String> mSenders;
 
-    public FragmentPagerAdapter(FragmentManager fm, HashMap<String, List<SmsMessage>> map, List<String> senders) {
+    public FragmentPagerAdapter(FragmentManager fm, HashMap<String, List<Message>> map, List<String> senders) {
         mFragmentManager = fm;
         mData = map;
         mSenders = senders;
@@ -55,18 +56,18 @@ public class FragmentPagerAdapter extends PagerAdapter {
     public void startUpdate(ViewGroup container) {
     }
 
-    public void addSmsMessage(SmsMessage msg) {
-        if (!mData.containsKey(msg.getDisplayOriginatingAddress())) {
-            mData.put(msg.getDisplayOriginatingAddress(), new ArrayList<SmsMessage>());
-            mSenders.add(msg.getDisplayOriginatingAddress());
+    public void addSmsMessage(Message msg) {
+        if (!mData.containsKey(msg.getSender())) {
+            mData.put(msg.getSender(), new ArrayList<Message>());
+            mSenders.add(msg.getSender());
         }
-        mData.get(msg.getDisplayOriginatingAddress()).add(msg);
+        mData.get(msg.getSender()).add(msg);
 
         notifyDataSetChanged();
-        myNotifyDataSetChanged(mSenders.indexOf(msg.getDisplayOriginatingAddress()), msg);
+        myNotifyDataSetChanged(mSenders.indexOf(msg.getSender()));
     }
 
-    private void myNotifyDataSetChanged(int position, SmsMessage msg) {
+    private void myNotifyDataSetChanged(int position) {
         try {
             MessageFragment f = mFragments.get(position);
             if (f == null) {

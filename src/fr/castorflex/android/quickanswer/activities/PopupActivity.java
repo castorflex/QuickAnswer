@@ -17,6 +17,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class PopupActivity extends FragmentActivity {
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(), new HashMap<String, List<SmsMessage>>(), new ArrayList<String>());
+        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setPageMargin(5);
         mViewPager.setPageMarginDrawable(R.drawable.viewpager_margin);
@@ -69,11 +70,12 @@ public class PopupActivity extends FragmentActivity {
     private void populateAdapterFromBundle(Bundle b) {
         List<String> ret = new ArrayList<String>();
         Object[] pdus = (Object[]) b.get("pdus");
+        SmsMessage[] messages = new SmsMessage[pdus.length];
         for (int i = 0; i < pdus.length; ++i) {
             byte[] byteData = (byte[]) pdus[i];
-            SmsMessage msg = SmsMessage.createFromPdu(byteData);
-            mPagerAdapter.addSmsMessage(msg);
+            messages[i] = SmsMessage.createFromPdu(byteData);
         }
+        mPagerAdapter.addSmsMessage(new Message(messages[0].getDisplayOriginatingAddress(), messages));
     }
 
     private void updateScreenSize() {
