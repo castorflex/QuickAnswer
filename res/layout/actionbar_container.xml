@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="48dp"
+              android:orientation="horizontal">
+
+    <ImageView
+            android:id="@+id/imageView_actionbar"
+            android:layout_height="48dp"
+            android:layout_width="48dp"
+            android:contentDescription="@string/contentDescription_icon"
+            android:src="@drawable/ic_launcher"
+            />
+
+    <LinearLayout
+            android:layout_marginLeft="8dp"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_margin="4dp">
+
+        <TextView
+                android:text="Antoine Merle"
+                android:id="@+id/textView_actionbar_big"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:textColor="@color/textview_background_dark"/>
+
+        <TextView
+                android:text="+33650044868"
+                android:id="@+id/textView_actionbar_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/textview_background_dark"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

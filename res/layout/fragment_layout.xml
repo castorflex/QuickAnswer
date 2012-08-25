@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <include
+            android:id="@+id/actionbar"
+            layout="@layout/actionbar_container"
+            android:layout_alignParentTop="true"
+            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            />
+
+
+
+
+    <ListView
+            android:id="@+id/listview_messages"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/actionbar"
+            android:layout_above="@+id/linearLayout_send"
+            android:divider="@drawable/divider"
+            android:dividerHeight="1px"
+            android:background="@drawable/background_light"/>
+
+
+    <LinearLayout
+            android:id="@+id/linearLayout_send"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/background_light"
+            >
+
+        <EditText android:background="@drawable/edit_text_holo_light"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:maxLines="3"
+                  android:hint="@string/edittext_hint"/>
+
+        <ImageButton
+                android:background="?android:attr/selectableItemBackground"
+                style="@android:style/Widget.Holo.Button.Borderless"
+                android:src="@drawable/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <include
+            android:id="@+id/contextbar"
+            layout="@layout/contextactionbar_container"
+            android:layout_height="44dp"
+            android:layout_width="match_parent"
+            android:layout_below="@id/actionbar"/>
+
+</RelativeLayout>
