@@ -1,15 +1,18 @@
 package fr.castorflex.android.quickanswer.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import fr.castorflex.android.quickanswer.pojos.Message;
 
 import java.util.ArrayList;
@@ -23,7 +26,7 @@ import java.util.List;
  * Time: 00:56
  * To change this template use File | Settings | File Templates.
  */
-public class FragmentPagerAdapter extends PagerAdapter {
+public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPageChangeListener {
     private static final String TAG = "FragmentStatePagerAdapter";
     private static final boolean DEBUG = false;
 
@@ -34,13 +37,17 @@ public class FragmentPagerAdapter extends PagerAdapter {
     public ArrayList<MessageFragment> mFragments = new ArrayList<MessageFragment>();
     private Fragment mCurrentPrimaryItem = null;
 
-    HashMap<String, List<Message>> mData;
-    List<String> mSenders;
+    private HashMap<String, List<Message>> mData;
+    private List<String> mSenders;
+    private PopupActivity mActivity;
 
-    public FragmentPagerAdapter(FragmentManager fm, HashMap<String, List<Message>> map, List<String> senders) {
+    private int mCurrentPosition;
+
+    public FragmentPagerAdapter(PopupActivity activity, FragmentManager fm, HashMap<String, List<Message>> map, List<String> senders) {
         mFragmentManager = fm;
         mData = map;
         mSenders = senders;
+        mActivity = activity;
     }
 
     @Override
@@ -63,15 +70,17 @@ public class FragmentPagerAdapter extends PagerAdapter {
         }
         mData.get(msg.getSender()).add(msg);
 
-        notifyDataSetChanged();
         myNotifyDataSetChanged(mSenders.indexOf(msg.getSender()));
+        notifyDataSetChanged();
     }
 
     private void myNotifyDataSetChanged(int position) {
         try {
-            MessageFragment f = mFragments.get(position);
+            MessageFragment f = null;
+            if (position >= 0)
+                f = mFragments.get(position);
             if (f == null) {
-                f = getItem(position);
+                f = getItem(mSenders == null ? 0 : mSenders.size());
                 mFragments.set(position, f);
             }
             mFragments.get(position).notifyChanged();
@@ -210,5 +219,40 @@ public class FragmentPagerAdapter extends PagerAdapter {
                 }
             }
         }
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_UNCHANGED;
+    }
+
+    public void removeFragment(String fragment) {
+        mSenders.remove(fragment);
+        mData.remove(fragment);
+    }
+
+    public int getCurrentPosition() {
+        return mCurrentPosition;
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        try {
+            mCurrentPosition = position;
+            InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            mFragments.get(mCurrentPosition).hideKeyboard();
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

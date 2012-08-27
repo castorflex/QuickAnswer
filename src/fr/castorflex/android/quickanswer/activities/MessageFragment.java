@@ -1,15 +1,20 @@
 package fr.castorflex.android.quickanswer.activities;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsMessage;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Contact;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.providers.ContactProvider;
@@ -25,7 +30,7 @@ import java.util.List;
  * Time: 00:38
  * To change this template use File | Settings | File Templates.
  */
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
     private String mIdSender;
     private ListView mListView;
@@ -33,6 +38,8 @@ public class MessageFragment extends Fragment {
     private List<Message> mInitData;
     private LinearLayout mActionbar;
     private Contact mContact;
+    private ImageButton mSendButton;
+    private EditText mEditTextMessage;
 
     public MessageFragment(String sender, List<Message> data) {
         mInitData = data;
@@ -46,6 +53,8 @@ public class MessageFragment extends Fragment {
 
         mActionbar = (LinearLayout) view.findViewById(R.id.actionbar);
 
+        mSendButton = (ImageButton) view.findViewById(R.id.imageButton_send);
+        mEditTextMessage = (EditText) view.findViewById(R.id.editText_message);
 
         mListView = (ListView) view.findViewById(R.id.listview_messages);
         View v = new View(getActivity());
@@ -65,17 +74,20 @@ public class MessageFragment extends Fragment {
     private void initViews() {
         mContact = ContactProvider.getContactName(mIdSender, getActivity());
         if (mContact != null) {
-            if(mContact.getPhoto() != null)
-            ((ImageView)mActionbar.findViewById(R.id.imageView_actionbar)).setImageURI(Uri.parse(mContact.getPhoto()));
+            if (mContact.getPhoto() != null)
+                ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setImageURI(Uri.parse(mContact.getPhoto()));
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_small)).setText(mIdSender);
         } else {
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mIdSender);
             mActionbar.findViewById(R.id.textView_actionbar_small).setVisibility(View.GONE);
         }
+
+        mEditTextMessage.addTextChangedListener(this);
+        mSendButton.setClickable(false);
+        mSendButton.setEnabled(false);
+        mSendButton.setOnClickListener(this);
     }
-
-
 
 
     private void initAdapter() {
@@ -91,5 +103,45 @@ public class MessageFragment extends Fragment {
     public void notifyChanged() {
         mAdapter.notifyDataSetChanged();
         mListView.smoothScrollToPosition(mAdapter.getCount());
+    }
+
+
+    //////////////////////IMPLEMENTS/////////////////////////////////////////////////
+    @Override
+    public void onClick(View view) {
+        if (view == mSendButton) {
+            hideKeyboard();
+
+            String messageBody = mEditTextMessage.getText().toString();
+            mEditTextMessage.setText("");
+            new SmsSenderThread(mIdSender, messageBody).start();
+            ((PopupActivity) getActivity()).removeFragment(mIdSender);
+        }
+    }
+
+    public void hideKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSendButton.getWindowToken(), 0);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable.toString() == null || editable.toString().length() == 0) {
+            mSendButton.setEnabled(false);
+            mSendButton.setClickable(false);
+        } else {
+            mSendButton.setEnabled(true);
+            mSendButton.setClickable(true);
+        }
     }
 }

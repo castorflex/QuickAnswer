@@ -13,8 +13,6 @@
             />
 
 
-
-
     <ListView
             android:id="@+id/listview_messages"
             android:layout_height="match_parent"
@@ -35,17 +33,21 @@
             android:background="@drawable/background_light"
             >
 
-        <EditText android:background="@drawable/edit_text_holo_light"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:maxLines="3"
-                  android:hint="@string/edittext_hint"/>
+        <EditText
+                android:id="@+id/editText_message"
+                android:background="@drawable/edit_text_holo_light"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="3"
+                android:hint="@string/edittext_hint"/>
 
         <ImageButton
+                android:id="@+id/imageButton_send"
                 android:background="?android:attr/selectableItemBackground"
                 style="@android:style/Widget.Holo.Button.Borderless"
                 android:src="@drawable/send"
+                android:clickable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>

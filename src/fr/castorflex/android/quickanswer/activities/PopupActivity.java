@@ -1,25 +1,22 @@
 package fr.castorflex.android.quickanswer.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.telephony.SmsMessage;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.Scroller;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,12 +31,13 @@ import java.util.List;
 public class PopupActivity extends FragmentActivity {
 
 
-    private static final int HEIGHT_P = MeasuresUtils.DpToPx(350);
+    private static final int HEIGHT_P = MeasuresUtils.DpToPx(48 + 44 + 130 + 48);
     private static final int HEIGHT_L = MeasuresUtils.DpToPx(215);
 
 
     private ViewPager mViewPager;
     private FragmentPagerAdapter mPagerAdapter;
+    private FixedSpeedScroller mNewScroller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +48,22 @@ public class PopupActivity extends FragmentActivity {
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
+        mPagerAdapter = new FragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setPageMargin(5);
         mViewPager.setPageMarginDrawable(R.drawable.viewpager_margin);
+        mViewPager.setOnPageChangeListener(mPagerAdapter);
+        try {
+            Field scroller;
+            scroller = ViewPager.class.getDeclaredField("mScroller");
+            scroller.setAccessible(true);
+            mNewScroller = new FixedSpeedScroller(this, new DecelerateInterpolator());
+            scroller.set(mViewPager, mNewScroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
+
         updateScreenSize();
 
         populateAdapterFromBundle(getIntent().getExtras());
@@ -98,4 +108,25 @@ public class PopupActivity extends FragmentActivity {
     }
 
 
+    public void removeFragment(final String fragment) {
+        if (mPagerAdapter.getCount() <= 1)
+            finish();
+        else {
+            if (mPagerAdapter.getCurrentPosition() == mPagerAdapter.getCount() - 1){
+                mViewPager.setCurrentItem(mPagerAdapter.getCurrentPosition() - 1);
+            }
+            else
+                mViewPager.setCurrentItem(mPagerAdapter.getCurrentPosition() + 1);
+            Handler h = new Handler(getMainLooper());
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPagerAdapter.removeFragment(fragment);
+                    mPagerAdapter.notifyDataSetChanged();
+                }
+            }, mNewScroller.getScrollerDuration());
+
+        }
+
+    }
 }
