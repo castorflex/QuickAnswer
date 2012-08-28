@@ -10,7 +10,6 @@
             android:layout_height="48dp"
             android:layout_width="48dp"
             android:contentDescription="@string/contentDescription_icon"
-            android:src="@drawable/ic_launcher"
             />
 
     <LinearLayout
@@ -22,7 +21,6 @@
             android:layout_margin="4dp">
 
         <TextView
-                android:text="Antoine Merle"
                 android:id="@+id/textView_actionbar_big"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -32,7 +30,6 @@
                 android:textColor="@color/textview_background_dark"/>
 
         <TextView
-                android:text="+33650044868"
                 android:id="@+id/textView_actionbar_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
