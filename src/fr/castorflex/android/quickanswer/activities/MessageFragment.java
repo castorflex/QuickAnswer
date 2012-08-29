@@ -62,6 +62,12 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
         mListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
         mListView.setStackFromBottom(true);
 
+        View header = new View(getActivity());
+        AbsListView.LayoutParams p = new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                MeasuresUtils.DpToPx(44));
+        header.setLayoutParams(p);
+        mListView.addHeaderView(header);
+        mListView.setHeaderDividersEnabled(false);
 
         initViews();
         initAdapter();

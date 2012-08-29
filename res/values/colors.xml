@@ -19,8 +19,9 @@
 -->
 <resources>
 
-    <color name="textview_background_light">#ff222222</color>
+    <color name="textview_background_light">#ff333333</color>
     <color name="textview_background_dark">#fff3f3f3</color>
+    <color name="textview_date_background_light">#ff555555</color>
 
     <drawable name="background_light">#fff3f3f3</drawable>
     <drawable name="background_dark">#ff222222</drawable>

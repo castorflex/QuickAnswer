@@ -10,6 +10,7 @@ import android.widget.TextView;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Message;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -23,10 +24,12 @@ public class MessagesAdapter extends BaseAdapter {
 
     private List<Message> mData;
     private LayoutInflater mInflater;
+    private SimpleDateFormat mDateFormat;
 
     public MessagesAdapter(Context c, List<Message> data) {
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mData = data;
+        mDateFormat = new SimpleDateFormat("HH:mm");
     }
 
     @Override
@@ -65,6 +68,7 @@ public class MessagesAdapter extends BaseAdapter {
 
         Message item = getItem(position);
         holder.message.setText(item.getMessage());
+        holder.date.setText(mDateFormat.format(item.getDate()));
 
         return vi;
     }

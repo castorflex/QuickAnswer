@@ -2,6 +2,9 @@ package fr.castorflex.android.quickanswer.pojos;
 
 import android.telephony.SmsMessage;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Castorflex
@@ -13,6 +16,7 @@ public class Message {
 
     private String sender;
     private String message;
+    private Date date;
 
     public Message(String sender, SmsMessage... messages)
     {
@@ -23,6 +27,7 @@ public class Message {
         {
             message += messages[i].getDisplayMessageBody();
         }
+        date = Calendar.getInstance().getTime();
     }
 
     public String getSender() {
@@ -31,5 +36,9 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+    public Date getDate(){
+        return date;
     }
 }

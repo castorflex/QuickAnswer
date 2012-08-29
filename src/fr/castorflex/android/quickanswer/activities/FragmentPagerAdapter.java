@@ -223,7 +223,7 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
 
     @Override
     public int getItemPosition(Object object) {
-        return POSITION_UNCHANGED;
+        return POSITION_NONE;
     }
 
     public void removeFragment(String fragment) {

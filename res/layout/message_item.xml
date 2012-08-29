@@ -3,18 +3,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:background="@drawable/background_light"
               android:padding="4dp"
               android:minHeight="48dp">
 
     <TextView android:id="@+id/textview_message_item_date"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
-              android:textSize="12sp"
+              android:gravity="center_horizontal"
+              android:textSize="10sp"
               android:background="@android:color/transparent"
-              android:textColor="@color/textview_background_light"/>
+              android:textColor="@color/textview_date_background_light"/>
 
     <TextView android:id="@+id/textview_message_item_message"
               android:layout_width="wrap_content"
