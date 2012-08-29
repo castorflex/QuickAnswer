@@ -41,6 +41,9 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
     private ImageButton mSendButton;
     private EditText mEditTextMessage;
 
+    private View mLeftIndicator;
+    private View mRightIndicator;
+
     public MessageFragment(String sender, List<Message> data) {
         mInitData = data;
         mIdSender = sender;
@@ -55,6 +58,8 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
 
         mSendButton = (ImageButton) view.findViewById(R.id.imageButton_send);
         mEditTextMessage = (EditText) view.findViewById(R.id.editText_message);
+        mLeftIndicator = mActionbar.findViewById(R.id.view_leftindicator);
+        mRightIndicator = mActionbar.findViewById(R.id.view_rightindicator);
 
         mListView = (ListView) view.findViewById(R.id.listview_messages);
         View v = new View(getActivity());
