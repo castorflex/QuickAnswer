@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,10 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
     }
 
     public MessageFragment getItem(int position) {
-        return new MessageFragment(mSenders.get(position), mData.get(mSenders.get(position)));
+        if (position < mFragments.size())
+            return mFragments.get(position);
+        else
+            return new MessageFragment(mSenders.get(position), mData.get(mSenders.get(position)));
     }
 
     @Override
@@ -70,22 +72,45 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
         }
         mData.get(msg.getSender()).add(msg);
 
-        myNotifyDataSetChanged(mSenders.indexOf(msg.getSender()));
         notifyDataSetChanged();
+        myNotifyDataSetChanged(mSenders.indexOf(msg.getSender()));
+
     }
 
     private void myNotifyDataSetChanged(int position) {
-        try {
-            MessageFragment f = null;
-            if (position >= 0)
+        MessageFragment f = null;
+        if (position >= 0)
+            try {
                 f = mFragments.get(position);
-            if (f == null) {
-                f = getItem(mSenders == null ? 0 : mSenders.size());
-                mFragments.set(position, f);
+            } catch (Exception e) {
             }
-            mFragments.get(position).notifyChanged();
-            //mFragments.get(position).addSms(msg);
-        } catch (Exception e) {
+        if (f == null) {
+            f = getItem(mSenders == null ? 0 : mSenders.size() - 1);
+            if (position < mFragments.size())
+                mFragments.set(position, f);
+            else
+                mFragments.add(f);
+            notifyPrevNext(position);
+        }
+        mFragments.get(position).notifyChanged();
+        //mFragments.get(position).addSms(msg);
+    }
+
+    private void notifyPrevNext(int position) {
+        //prev
+        for (int i = position - 1; i >= 0; --i) {
+            MessageFragment prev = mFragments.get(i);
+            if (prev != null) {
+                prev.notifyNext();
+            }
+        }
+
+        //next
+        for (int i = position + 1; i < mFragments.size(); ++i) {
+            MessageFragment next = mFragments.get(i);
+            if (next != null) {
+                next.notifyPrev();
+            }
         }
     }
 
@@ -99,11 +124,21 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
         // DONE Remove of the add process of the old stuff
         /* if (mFragments.size() > position) { Fragment f = mFragments.get(position); if (f != null) { return f; } } */
 
+        MessageFragment fragment = null;
+
+//        if (position == getCurrentPosition()) {
+//            try {
+//                fragment = mFragments.get(position);
+//                return fragment;
+//            } catch (Exception e) {
+//            }
+//        }
+
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
 
-        MessageFragment fragment = getItem(position);
+        fragment = getItem(position);
         if (mSavedState.size() > position) {
             Fragment.SavedState fss = mSavedState.get(position);
             if (fss != null) {
@@ -128,6 +163,10 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
     public void destroyItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
 
+        try {
+            mFragments.remove(fragment);
+        } catch (Exception e) {
+        }
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }
@@ -223,6 +262,19 @@ public class FragmentPagerAdapter extends PagerAdapter implements ViewPager.OnPa
 
     @Override
     public int getItemPosition(Object object) {
+        MessageFragment fragment = (MessageFragment) object;
+
+        boolean found = false;
+        int i = 0;
+        while (i < mSenders.size() && !found) {
+            if (fragment.getSender().equals(mSenders.get(i)))
+                found = true;
+            else ++i;
+        }
+
+        if (i >= 0 && i < mSenders.size())
+            return i;
+
         return POSITION_NONE;
     }
 

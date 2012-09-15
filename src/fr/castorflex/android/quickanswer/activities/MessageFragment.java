@@ -4,13 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
@@ -58,8 +56,8 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
 
         mSendButton = (ImageButton) view.findViewById(R.id.imageButton_send);
         mEditTextMessage = (EditText) view.findViewById(R.id.editText_message);
-        mLeftIndicator = mActionbar.findViewById(R.id.view_leftindicator);
-        mRightIndicator = mActionbar.findViewById(R.id.view_rightindicator);
+        mLeftIndicator = mActionbar.findViewById(R.id.imageView_prev);
+        mRightIndicator = mActionbar.findViewById(R.id.imageView_next);
 
         mListView = (ListView) view.findViewById(R.id.listview_messages);
         View v = new View(getActivity());
@@ -112,8 +110,10 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
     }
 
     public void notifyChanged() {
-        mAdapter.notifyDataSetChanged();
-        mListView.smoothScrollToPosition(mAdapter.getCount());
+        if (mAdapter != null && mListView != null) {
+            mAdapter.notifyDataSetChanged();
+            mListView.smoothScrollToPosition(mAdapter.getCount());
+        }
     }
 
 
@@ -130,9 +130,8 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
         }
     }
 
-    public void hideKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSendButton.getWindowToken(), 0);
     }
@@ -154,5 +153,17 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
             mSendButton.setEnabled(true);
             mSendButton.setClickable(true);
         }
+    }
+
+    public void notifyNext() {
+        mRightIndicator.setVisibility(View.VISIBLE);
+    }
+
+    public void notifyPrev() {
+        mLeftIndicator.setVisibility(View.VISIBLE);
+    }
+
+    public String getSender(){
+        return mIdSender;
     }
 }
