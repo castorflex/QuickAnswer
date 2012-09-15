@@ -16,7 +16,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.libs.CustomViewPager;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
 import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Message;
@@ -41,11 +43,14 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     private static final int HEIGHT_L = MeasuresUtils.DpToPx(48 + 44 + 70);
 
 
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private MyFragmentPagerAdapter mPagerAdapter;
     private FixedSpeedScroller mNewScroller;
 
-    private ImageButton mSendButton;
+
+    private ImageView mSmsAppButton;
+
+    private ImageView mSendButton;
     private EditText mEditTextMessage;
 
     @Override
@@ -55,9 +60,13 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         setContentView(R.layout.popup_layout);
         setFinishOnTouchOutside(false);
 
-        mSendButton = (ImageButton) findViewById(R.id.imageButton_send);
+
+        mSmsAppButton = (ImageView) findViewById(R.id.imageView_sms_app);
+        mSendButton = (ImageView) findViewById(R.id.imageButton_send);
         mEditTextMessage = (EditText) findViewById(R.id.editText_message);
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager = (CustomViewPager) findViewById(R.id.viewPager);
+
+
         mPagerAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setPageMargin(1);
@@ -78,6 +87,8 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mSendButton.setClickable(false);
         mSendButton.setEnabled(false);
         mSendButton.setOnClickListener(this);
+
+        mSmsAppButton.setOnClickListener(this);
 
         updateScreenSize();
 
@@ -154,6 +165,11 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
             mEditTextMessage.setText("");
             new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
             removeFragment(mPagerAdapter.getCurrentSender());
+        }else if(view == mSmsAppButton){
+            Intent sendIntent= new Intent(Intent.ACTION_VIEW);
+            sendIntent.putExtra("address", mPagerAdapter.getCurrentSender());
+            sendIntent.setType("vnd.android-dir/mms-sms");
+            startActivity(sendIntent);
         }
     }
 

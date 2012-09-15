@@ -22,14 +22,4 @@
             android:dividerHeight="1px"
             android:background="@drawable/background_light"/>
 
-
-
-
-    <include
-            android:id="@+id/contextbar"
-            layout="@layout/contextactionbar_container"
-            android:layout_height="44dp"
-            android:layout_width="match_parent"
-            android:layout_below="@id/actionbar"/>
-
 </RelativeLayout>
