@@ -1,5 +1,6 @@
 package fr.castorflex.android.quickanswer.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,12 +8,17 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.telephony.SmsMessage;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.widget.Scroller;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
+import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
@@ -28,16 +34,19 @@ import java.util.List;
  * Time: 22:29
  * To change this template use File | Settings | File Templates.
  */
-public class PopupActivity extends FragmentActivity {
+public class PopupActivity extends FragmentActivity implements TextWatcher, View.OnClickListener {
 
 
-    private static final int HEIGHT_P = MeasuresUtils.DpToPx(48 + 44 + 130 + 48);
-    private static final int HEIGHT_L = MeasuresUtils.DpToPx(215);
+    private static final int HEIGHT_P = MeasuresUtils.DpToPx(48 + 44 + 130);
+    private static final int HEIGHT_L = MeasuresUtils.DpToPx(48 + 44 + 70);
 
 
     private ViewPager mViewPager;
-    private FragmentPagerAdapter mPagerAdapter;
+    private MyFragmentPagerAdapter mPagerAdapter;
     private FixedSpeedScroller mNewScroller;
+
+    private ImageButton mSendButton;
+    private EditText mEditTextMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +55,12 @@ public class PopupActivity extends FragmentActivity {
         setContentView(R.layout.popup_layout);
         setFinishOnTouchOutside(false);
 
-
+        mSendButton = (ImageButton) findViewById(R.id.imageButton_send);
+        mEditTextMessage = (EditText) findViewById(R.id.editText_message);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mPagerAdapter = new FragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
+        mPagerAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setPageMargin(5);
+        mViewPager.setPageMargin(1);
         mViewPager.setPageMarginDrawable(R.drawable.viewpager_margin);
         mViewPager.setOnPageChangeListener(mPagerAdapter);
         try {
@@ -63,6 +73,11 @@ public class PopupActivity extends FragmentActivity {
         } catch (IllegalArgumentException e) {
         } catch (IllegalAccessException e) {
         }
+
+        mEditTextMessage.addTextChangedListener(this);
+        mSendButton.setClickable(false);
+        mSendButton.setEnabled(false);
+        mSendButton.setOnClickListener(this);
 
         updateScreenSize();
 
@@ -112,10 +127,9 @@ public class PopupActivity extends FragmentActivity {
         if (mPagerAdapter.getCount() <= 1)
             finish();
         else {
-            if (mPagerAdapter.getCurrentPosition() == mPagerAdapter.getCount() - 1){
+            if (mPagerAdapter.getCurrentPosition() == mPagerAdapter.getCount() - 1) {
                 mViewPager.setCurrentItem(mPagerAdapter.getCurrentPosition() - 1);
-            }
-            else
+            } else
                 mViewPager.setCurrentItem(mPagerAdapter.getCurrentPosition() + 1);
             Handler h = new Handler(getMainLooper());
             h.postDelayed(new Runnable() {
@@ -128,5 +142,47 @@ public class PopupActivity extends FragmentActivity {
 
         }
 
+    }
+
+    //////////////////////IMPLEMENTS/////////////////////////////////////////////////
+    @Override
+    public void onClick(View view) {
+        if (view == mSendButton) {
+            hideKeyboard();
+
+            String messageBody = mEditTextMessage.getText().toString();
+            mEditTextMessage.setText("");
+            new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
+            removeFragment(mPagerAdapter.getCurrentSender());
+        }
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSendButton.getWindowToken(), 0);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable.toString() == null || editable.toString().length() == 0) {
+            mSendButton.setEnabled(false);
+            mSendButton.setClickable(false);
+        } else {
+            mSendButton.setEnabled(true);
+            mSendButton.setClickable(true);
+        }
+    }
+
+    public void clearEditText() {
+        mEditTextMessage.setText("");
     }
 }

@@ -1,18 +1,14 @@
 package fr.castorflex.android.quickanswer.activities;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.view.animation.*;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
-import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Contact;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.providers.ContactProvider;
@@ -28,7 +24,9 @@ import java.util.List;
  * Time: 00:38
  * To change this template use File | Settings | File Templates.
  */
-public class MessageFragment extends Fragment implements View.OnClickListener, TextWatcher {
+public class MessageFragment extends Fragment {
+
+    private static final int ANIM_DURATION = 700;
 
     private String mIdSender;
     private ListView mListView;
@@ -36,15 +34,21 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
     private List<Message> mInitData;
     private LinearLayout mActionbar;
     private Contact mContact;
-    private ImageButton mSendButton;
-    private EditText mEditTextMessage;
+
 
     private View mLeftIndicator;
     private View mRightIndicator;
+    private boolean mIsLeftIndicActivated;
+    private boolean mIsRightIndicActivated;
 
-    public MessageFragment(String sender, List<Message> data) {
+    protected AlphaAnimation mFadeAnimation = new AlphaAnimation(0.0f, 1.0f);
+
+
+    public MessageFragment(String sender, List<Message> data, boolean leftIndic, boolean rightIndic) {
         mInitData = data;
         mIdSender = sender;
+        mIsLeftIndicActivated = leftIndic;
+        mIsRightIndicActivated = rightIndic;
     }
 
 
@@ -54,10 +58,18 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
 
         mActionbar = (LinearLayout) view.findViewById(R.id.actionbar);
 
-        mSendButton = (ImageButton) view.findViewById(R.id.imageButton_send);
-        mEditTextMessage = (EditText) view.findViewById(R.id.editText_message);
+
         mLeftIndicator = mActionbar.findViewById(R.id.imageView_prev);
         mRightIndicator = mActionbar.findViewById(R.id.imageView_next);
+        initAnimation();
+        if (mIsLeftIndicActivated) {
+            mLeftIndicator.setVisibility(View.VISIBLE);
+            mLeftIndicator.startAnimation(mFadeAnimation);
+        }
+        if (mIsRightIndicActivated) {
+            mRightIndicator.setVisibility(View.VISIBLE);
+            mRightIndicator.startAnimation(mFadeAnimation);
+        }
 
         mListView = (ListView) view.findViewById(R.id.listview_messages);
         View v = new View(getActivity());
@@ -80,6 +92,16 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
         return view;
     }
 
+    private void initAnimation() {
+        mFadeAnimation.setDuration(ANIM_DURATION);
+        mFadeAnimation.setFillAfter(true);
+
+        mFadeAnimation.setInterpolator(new LinearInterpolator());
+
+        mFadeAnimation.setRepeatCount(Animation.INFINITE);
+        mFadeAnimation.setRepeatMode(Animation.REVERSE);
+    }
+
     private void initViews() {
         mContact = ContactProvider.getContactName(mIdSender, getActivity());
         if (mContact != null) {
@@ -92,10 +114,7 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
             mActionbar.findViewById(R.id.textView_actionbar_small).setVisibility(View.GONE);
         }
 
-        mEditTextMessage.addTextChangedListener(this);
-        mSendButton.setClickable(false);
-        mSendButton.setEnabled(false);
-        mSendButton.setOnClickListener(this);
+
     }
 
 
@@ -116,45 +135,6 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
         }
     }
 
-
-    //////////////////////IMPLEMENTS/////////////////////////////////////////////////
-    @Override
-    public void onClick(View view) {
-        if (view == mSendButton) {
-            hideKeyboard();
-
-            String messageBody = mEditTextMessage.getText().toString();
-            mEditTextMessage.setText("");
-            new SmsSenderThread(mIdSender, messageBody).start();
-            ((PopupActivity) getActivity()).removeFragment(mIdSender);
-        }
-    }
-
-    public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSendButton.getWindowToken(), 0);
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        if (editable.toString() == null || editable.toString().length() == 0) {
-            mSendButton.setEnabled(false);
-            mSendButton.setClickable(false);
-        } else {
-            mSendButton.setEnabled(true);
-            mSendButton.setClickable(true);
-        }
-    }
-
     public void notifyNext() {
         mRightIndicator.setVisibility(View.VISIBLE);
     }
@@ -163,7 +143,7 @@ public class MessageFragment extends Fragment implements View.OnClickListener, T
         mLeftIndicator.setVisibility(View.VISIBLE);
     }
 
-    public String getSender(){
+    public String getSender() {
         return mIdSender;
     }
 }
