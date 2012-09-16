@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="44dp"
-              android:background="@drawable/background_dark_grey_semitransparent"
-              android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/background_dark_grey_semitransparent"
+        >
 
     <ImageButton android:id="@+id/imageView_sms_app"
-                 android:layout_marginLeft="8dp"
-                 android:layout_width="35dp"
-                 android:layout_height="35dp"
+                 android:paddingLeft="8dp"
+                 android:padding="4dp"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
                  android:background="?android:attr/selectableItemBackground"
                  android:src="@drawable/ic_sms_app"
+                 android:layout_gravity="center_vertical"
+                 android:layout_alignParentRight="true"/>
+
+    <ImageButton android:id="@+id/imageView_overflow"
+                 android:paddingRight="8dp"
+                 android:padding="4dp"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:background="?android:attr/selectableItemBackground"
+                 android:src="@drawable/ic_overflow"
                  android:layout_gravity="center_vertical"/>
 
-</LinearLayout>
+
+</RelativeLayout>

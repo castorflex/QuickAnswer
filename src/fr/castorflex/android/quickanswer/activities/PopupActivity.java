@@ -15,13 +15,14 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.libs.CustomViewPager;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
+import fr.castorflex.android.quickanswer.libs.OverflowLayout;
 import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
 import java.lang.reflect.Field;
@@ -36,7 +37,7 @@ import java.util.List;
  * Time: 22:29
  * To change this template use File | Settings | File Templates.
  */
-public class PopupActivity extends FragmentActivity implements TextWatcher, View.OnClickListener {
+public class PopupActivity extends FragmentActivity implements TextWatcher, View.OnClickListener, OverflowLayout.OnItemSelectedListener {
 
 
     private static final int HEIGHT_P = MeasuresUtils.DpToPx(48 + 44 + 130);
@@ -49,6 +50,8 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
 
     private ImageView mSmsAppButton;
+    private ImageView mOverflowButton;
+    private OverflowLayout mOverflowMenu;
 
     private ImageView mSendButton;
     private EditText mEditTextMessage;
@@ -60,7 +63,8 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         setContentView(R.layout.popup_layout);
         setFinishOnTouchOutside(false);
 
-
+        mOverflowMenu = (OverflowLayout) findViewById(R.id.overflowmenu);
+        mOverflowButton = (ImageView) findViewById(R.id.imageView_overflow);
         mSmsAppButton = (ImageView) findViewById(R.id.imageView_sms_app);
         mSendButton = (ImageView) findViewById(R.id.imageButton_send);
         mEditTextMessage = (EditText) findViewById(R.id.editText_message);
@@ -87,6 +91,9 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mSendButton.setClickable(false);
         mSendButton.setEnabled(false);
         mSendButton.setOnClickListener(this);
+        mOverflowButton.setOnClickListener(this);
+
+        mOverflowMenu.setOnItemSelectedListener(this);
 
         mSmsAppButton.setOnClickListener(this);
 
@@ -165,18 +172,55 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
             mEditTextMessage.setText("");
             new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
             removeFragment(mPagerAdapter.getCurrentSender());
-        }else if(view == mSmsAppButton){
-            Intent sendIntent= new Intent(Intent.ACTION_VIEW);
+        } else if (view == mSmsAppButton) {
+            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
             sendIntent.putExtra("address", mPagerAdapter.getCurrentSender());
             sendIntent.setType("vnd.android-dir/mms-sms");
             startActivity(sendIntent);
+        } else if (view == mOverflowButton) {
+            toggleOverflow();
         }
+    }
+
+    public void toggleOverflow() {
+        mOverflowMenu.toggle();
     }
 
     public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSendButton.getWindowToken(), 0);
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mEditTextMessage, 0);
+    }
+
+    @Override
+    public void onItemClick(QuickAnswer qa, int TYPE) {
+        if (TYPE == OverflowLayout.TYPE_SEND){
+            hideKeyboard();
+
+            String messageBody = qa.getMessage();
+            mEditTextMessage.setText("");
+            new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
+            removeFragment(mPagerAdapter.getCurrentSender());
+        }else if (TYPE == OverflowLayout.TYPE_EDIT){
+            mEditTextMessage.setText(qa.getMessage());
+            mEditTextMessage.requestFocus();
+            mEditTextMessage.setSelection(qa.getMessage().length());
+            showKeyboard();
+        }
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (!mOverflowMenu.onBackPressed())
+            super.onBackPressed();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
@@ -201,4 +245,6 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     public void clearEditText() {
         mEditTextMessage.setText("");
     }
+
+
 }

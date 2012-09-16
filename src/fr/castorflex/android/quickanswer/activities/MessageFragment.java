@@ -81,6 +81,9 @@ public class MessageFragment extends Fragment {
         AbsListView.LayoutParams p = new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 MeasuresUtils.DpToPx(44));
         header.setLayoutParams(p);
+        header.setFocusable(false);
+        header.setClickable(false);
+        header.setFocusableInTouchMode(false);
         mListView.addHeaderView(header);
         mListView.setHeaderDividersEnabled(false);
 
@@ -107,6 +110,8 @@ public class MessageFragment extends Fragment {
         if (mContact != null) {
             if (mContact.getPhoto() != null)
                 ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setImageURI(Uri.parse(mContact.getPhoto()));
+            else
+                ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setVisibility(View.GONE);
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_small)).setText(mIdSender);
         } else {
