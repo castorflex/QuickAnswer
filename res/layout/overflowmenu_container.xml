@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<fr.castorflex.android.quickanswer.libs.OverflowLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_overflow">
+    <ListView
+            android:id="@+id/listView_overflow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="1px"
+            android:background="@drawable/background_light"/>
+
+</fr.castorflex.android.quickanswer.libs.OverflowLayout>

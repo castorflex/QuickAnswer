@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+    <ImageView
+            android:id="@+id/imageView_send"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/selector_send"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"/>
+
+    <TextView
+            android:id="@+id/textView_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:singleLine="true"
+            android:background="@android:color/transparent"
+            android:textColor="@color/textview_date_background_light"
+            android:layout_toLeftOf="@+id/imageView_send"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"/>
+
+
+</RelativeLayout>
