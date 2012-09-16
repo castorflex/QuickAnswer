@@ -104,6 +104,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
         try {
             mCurrentPosition = position;
             mActivity.hideKeyboard();
+            mActivity.closeQuickAnswersMenu();
             mActivity.clearEditText();
         } catch (Exception e) {
         }

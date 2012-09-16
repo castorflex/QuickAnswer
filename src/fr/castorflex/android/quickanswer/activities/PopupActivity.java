@@ -247,4 +247,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     }
 
 
+    public void closeQuickAnswersMenu() {
+        mOverflowMenu.close();
+    }
 }

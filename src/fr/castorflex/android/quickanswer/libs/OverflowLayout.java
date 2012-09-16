@@ -135,7 +135,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
     }
 
     public void close() {
-        if (!mIsAnimating) {
+        if (!mIsAnimating && mIsOpened) {
             this.startAnimation(mAnimationClose);
             setVisibility(View.GONE);
             mIsOpened = false;
@@ -143,7 +143,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
     }
 
     public void open() {
-        if (!mIsAnimating) {
+        if (!mIsAnimating && !mIsOpened) {
             setVisibility(View.VISIBLE);
             this.startAnimation(mAnimationOpen);
             mIsOpened = true;
