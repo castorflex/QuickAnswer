@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
+import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +24,6 @@ import java.util.List;
  */
 public class OverflowLayout extends LinearLayout implements AdapterView.OnItemClickListener {
 
-    public final static QuickAnswer[] DEFAULT_QA = new QuickAnswer[]{
-            new QuickAnswer("Yes"),
-            new QuickAnswer("No"),
-            new QuickAnswer("See You"),
-            new QuickAnswer("OK"),
-            new QuickAnswer("Kiss")};
 
     public final static int TYPE_EDIT = 0;
     public final static int TYPE_SEND = 1;
@@ -90,7 +85,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
 
     private void init(Context context) {
         mContext = context;
-        mAdapter = new QuickAnswersAdapter(null);
+        mAdapter = new QuickAnswersAdapter();
 
         //animations
         mAnimationOpen = AnimationUtils.loadAnimation(context, R.anim.anim_overflow_open);
@@ -161,12 +156,8 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
         private List<QuickAnswer> mData;
         private LayoutInflater mInflater;
 
-        public QuickAnswersAdapter(List<QuickAnswer> data) {
-            if (data != null)
-                mData = data;
-            else
-                mData = Arrays.asList(DEFAULT_QA);
-
+        public QuickAnswersAdapter() {
+            mData = SettingsProvider.getQuickAnswers(mContext);
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
-import fr.castorflex.android.quickanswer.activities.PopupActivity;
+import fr.castorflex.android.quickanswer.ui.PopupActivity;
 import fr.castorflex.android.quickanswer.pojos.Message;
 
 import java.util.ArrayList;

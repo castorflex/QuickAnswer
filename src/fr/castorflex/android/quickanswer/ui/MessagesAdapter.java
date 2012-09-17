@@ -1,7 +1,6 @@
-package fr.castorflex.android.quickanswer.activities;
+package fr.castorflex.android.quickanswer.ui;
 
 import android.content.Context;
-import android.telephony.SmsMessage;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.activities;
+package fr.castorflex.android.quickanswer.ui;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;

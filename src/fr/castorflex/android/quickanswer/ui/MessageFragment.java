@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.activities;
+package fr.castorflex.android.quickanswer.ui;
 
 import android.net.Uri;
 import android.os.Bundle;

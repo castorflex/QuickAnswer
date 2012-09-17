@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_general_title">
+        <CheckBoxPreference
+                android:key="qa_activate"
+                android:title="@string/pref_general_qa_activation"
+                android:defaultValue="true"/>
+        <Preference
+                android:title="@string/pref_general_qa"
+                android:summary="@string/pref_general_qa_summary"
+                android:key="manage_qa"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/pref_about_title">
+        <Preference
+                android:title="@string/pref_about_version"
+                android:key="version"/>
+        <Preference
+                android:title="@string/pref_about_about"
+                android:summary="@string/pref_about_about_summary"
+                android:key="about"/>
+        <Preference
+                android:title="@string/pref_about_rate"
+                android:summary="@string/pref_about_rate_summary"
+                android:key="rate"/>
+    </PreferenceCategory>
+</PreferenceScreen>

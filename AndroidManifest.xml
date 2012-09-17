@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.PopupActivity"
+        <activity android:name=".ui.PopupActivity"
                   android:excludeFromRecents="true"
                   android:label="PopupActivity" android:theme="@style/NoTitleDialog"
                   android:launchMode="singleInstance" android:configChanges="orientation|keyboardHidden|screenSize">
