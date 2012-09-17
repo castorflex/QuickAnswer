@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.SettingsActivity;
 import fr.castorflex.android.quickanswer.libs.CustomViewPager;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
 import fr.castorflex.android.quickanswer.libs.OverflowLayout;
@@ -51,6 +52,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
     private ImageView mSmsAppButton;
     private ImageView mOverflowButton;
+    private ImageView mSettingsButton;
     private OverflowLayout mOverflowMenu;
 
     private ImageView mSendButton;
@@ -63,6 +65,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         setContentView(R.layout.popup_layout);
         setFinishOnTouchOutside(false);
 
+        mSettingsButton = (ImageView) findViewById(R.id.imageView_settings);
         mOverflowMenu = (OverflowLayout) findViewById(R.id.overflowmenu);
         mOverflowButton = (ImageView) findViewById(R.id.imageView_overflow);
         mSmsAppButton = (ImageView) findViewById(R.id.imageView_sms_app);
@@ -92,6 +95,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mSendButton.setEnabled(false);
         mSendButton.setOnClickListener(this);
         mOverflowButton.setOnClickListener(this);
+        mSettingsButton.setOnClickListener(this);
 
         mOverflowMenu.setOnItemSelectedListener(this);
 
@@ -112,13 +116,11 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
     private void populateAdapterFromBundle(Bundle b) {
         List<String> ret = new ArrayList<String>();
-        Object[] pdus = (Object[]) b.get("pdus");
-        SmsMessage[] messages = new SmsMessage[pdus.length];
-        for (int i = 0; i < pdus.length; ++i) {
-            byte[] byteData = (byte[]) pdus[i];
-            messages[i] = SmsMessage.createFromPdu(byteData);
+
+        List<Message> messages = b.getParcelableArrayList("listpdus");
+        for(Message msg : messages){
+            mPagerAdapter.addSmsMessage(msg);
         }
-        mPagerAdapter.addSmsMessage(new Message(messages[0].getDisplayOriginatingAddress(), messages));
     }
 
     private void updateScreenSize() {
@@ -179,6 +181,9 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
             startActivity(sendIntent);
         } else if (view == mOverflowButton) {
             toggleOverflow();
+        } else if(view == mSettingsButton){
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
     }
 

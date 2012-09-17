@@ -7,23 +7,54 @@
         >
 
     <ImageButton android:id="@+id/imageView_sms_app"
-                 android:paddingLeft="8dp"
-                 android:padding="4dp"
+                 android:paddingTop="4dp"
+                 android:paddingBottom="4dp"
+                 android:paddingLeft="16dp"
+                 android:paddingRight="16dp"
                  android:layout_width="wrap_content"
                  android:layout_height="match_parent"
-                 android:background="?android:attr/selectableItemBackground"
+                 android:background="@drawable/bg_selector"
                  android:src="@drawable/ic_sms_app"
                  android:layout_gravity="center_vertical"
                  android:layout_alignParentRight="true"/>
 
-    <ImageButton android:id="@+id/imageView_overflow"
-                 android:paddingRight="8dp"
-                 android:padding="4dp"
-                 android:layout_width="wrap_content"
-                 android:layout_height="match_parent"
-                 android:background="?android:attr/selectableItemBackground"
-                 android:src="@drawable/ic_overflow"
-                 android:layout_gravity="center_vertical"/>
+
+    <LinearLayout android:id="@+id/linearLayout_left"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:layout_alignParentLeft="true"
+                  android:layout_toLeftOf="@id/imageView_sms_app"
+                  android:orientation="horizontal" android:background="@android:color/transparent">
+
+        <ImageButton android:id="@+id/imageView_overflow"
+                     android:paddingTop="4dp"
+                     android:paddingBottom="4dp"
+                     android:paddingLeft="16dp"
+                     android:paddingRight="16dp"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:background="@drawable/bg_selector"
+                     android:src="@drawable/ic_overflow"
+                     android:layout_gravity="center_vertical"/>
+
+        <View android:layout_width="1dp"
+              android:layout_height="match_parent"
+              android:layout_marginTop="12dp"
+              android:layout_marginBottom="12dp"
+              android:background="@drawable/divider"/>
+
+        <ImageButton android:id="@+id/imageView_settings"
+                     android:paddingTop="4dp"
+                     android:paddingBottom="4dp"
+                     android:paddingLeft="16dp"
+                     android:paddingRight="16dp"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:background="@drawable/bg_selector"
+                     android:src="@drawable/ic_settings"
+                     android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
 
 
 </RelativeLayout>

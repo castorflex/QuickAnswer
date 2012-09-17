@@ -36,7 +36,7 @@
 
             <ImageView
                     android:id="@+id/imageButton_send"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="@drawable/bg_selector"
                     android:src="@drawable/selector_send"
                     android:clickable="false"
                     android:layout_width="48dp"
@@ -63,7 +63,7 @@
             android:layout_width="190dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="48dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="60dp"
             />
 
 

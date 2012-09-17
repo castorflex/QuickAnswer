@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.*;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.*;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Contact;
@@ -78,6 +80,7 @@ public class MessageFragment extends Fragment {
         mListView.setStackFromBottom(true);
 
         View header = new View(getActivity());
+        header.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_selector));
         AbsListView.LayoutParams p = new AbsListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 MeasuresUtils.DpToPx(44));
         header.setLayoutParams(p);
