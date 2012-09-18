@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
 import fr.castorflex.android.quickanswer.utils.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,12 +21,7 @@ import java.util.List;
  */
 public class SettingsProvider {
 
-    public final static QuickAnswer[] DEFAULT_QA = new QuickAnswer[]{
-            new QuickAnswer("Yes"),
-            new QuickAnswer("No"),
-            new QuickAnswer("See You"),
-            new QuickAnswer("OK"),
-            new QuickAnswer("Kiss")};
+    public static QuickAnswer[] DEFAULT_QA;
 
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_QA = "qa";
@@ -51,8 +46,7 @@ public class SettingsProvider {
         return prefs.getBoolean(KEY_ENABLED, true);
     }
 
-    public static void setAppEnabled(Context context, boolean value)
-    {
+    public static void setAppEnabled(Context context, boolean value) {
         SharedPreferences prefs = getSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean(KEY_ENABLED, value);
@@ -70,7 +64,11 @@ public class SettingsProvider {
 
             ret = ArrayUtils.convertArrayToList(answers);
         } else {
-            ret = ArrayUtils.convertArrayToList(DEFAULT_QA);
+            String[] strs = context.getResources().getStringArray(R.array.array_default_qa);
+            ret = new ArrayList<QuickAnswer>(strs.length);
+            for (String str : strs) {
+                ret.add(new QuickAnswer(str));
+            }
         }
         return ret;
     }
