@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.pojos;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.telephony.SmsMessage;
+import fr.castorflex.android.quickanswer.providers.SmsProvider;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +28,13 @@ public class Message implements Parcelable {
         for (int i = 0; i < messages.length; ++i) {
             message += messages[i].getDisplayMessageBody();
         }
+        date = Calendar.getInstance().getTime();
+    }
+
+    public Message(String sender, String message) {
+        this.sender = sender;
+        this.message = message;
+
         date = Calendar.getInstance().getTime();
     }
 

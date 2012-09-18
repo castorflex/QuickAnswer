@@ -6,7 +6,9 @@ import android.content.pm.PackageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
+import fr.castorflex.android.quickanswer.utils.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,18 +51,26 @@ public class SettingsProvider {
         return prefs.getBoolean(KEY_ENABLED, true);
     }
 
-    public static List<QuickAnswer> getQuickAnswers(Context context) {
+    public static void setAppEnabled(Context context, boolean value)
+    {
+        SharedPreferences prefs = getSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean(KEY_ENABLED, value);
+        edit.commit();
+    }
+
+    public static ArrayList<QuickAnswer> getQuickAnswers(Context context) {
         SharedPreferences prefs = getSharedPreferences(context);
         String strAnswers = prefs.getString(KEY_QA, null);
-        List<QuickAnswer> ret = null;
+        ArrayList<QuickAnswer> ret = null;
         if (strAnswers != null && strAnswers.length() > 0) {
             GsonBuilder gsonb = new GsonBuilder();
             Gson gson = gsonb.create();
             QuickAnswer[] answers = gson.fromJson(strAnswers, QuickAnswer[].class);
 
-            ret = Arrays.asList(answers);
+            ret = ArrayUtils.convertArrayToList(answers);
         } else {
-            ret = Arrays.asList(DEFAULT_QA);
+            ret = ArrayUtils.convertArrayToList(DEFAULT_QA);
         }
         return ret;
     }

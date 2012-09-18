@@ -16,15 +16,15 @@
     <PreferenceCategory
             android:title="@string/pref_about_title">
         <Preference
-                android:title="@string/pref_about_version"
-                android:key="version"/>
+                android:title="@string/pref_about_rate"
+                android:summary="@string/pref_about_rate_summary"
+                android:key="rate"/>
         <Preference
                 android:title="@string/pref_about_about"
                 android:summary="@string/pref_about_about_summary"
                 android:key="about"/>
         <Preference
-                android:title="@string/pref_about_rate"
-                android:summary="@string/pref_about_rate_summary"
-                android:key="rate"/>
+                android:title="@string/pref_about_version"
+                android:key="version"/>
     </PreferenceCategory>
 </PreferenceScreen>

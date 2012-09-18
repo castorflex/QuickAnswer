@@ -106,6 +106,8 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     }
 
 
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);    //To change body of overridden methods use File | Settings | File Templates.
@@ -117,7 +119,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         List<String> ret = new ArrayList<String>();
 
         List<Message> messages = b.getParcelableArrayList("listpdus");
-        for(Message msg : messages){
+        for (Message msg : messages) {
             mPagerAdapter.addSmsMessage(msg);
         }
     }
@@ -171,7 +173,8 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
             String messageBody = mEditTextMessage.getText().toString();
             mEditTextMessage.setText("");
-            new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
+            new SmsSenderThread(this, new Message(mPagerAdapter.getCurrentSender(), messageBody))
+                    .start();
             removeFragment(mPagerAdapter.getCurrentSender());
         } else if (view == mSmsAppButton) {
             Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -180,10 +183,16 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
             startActivity(sendIntent);
         } else if (view == mOverflowButton) {
             toggleOverflow();
-        } else if(view == mSettingsButton){
+        } else if (view == mSettingsButton) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mOverflowMenu.updateAdapter();
     }
 
     public void toggleOverflow() {
@@ -204,21 +213,21 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
     @Override
     public void onItemClick(QuickAnswer qa, int TYPE) {
-        if (TYPE == OverflowLayout.TYPE_SEND){
+        if (TYPE == OverflowLayout.TYPE_SEND) {
             hideKeyboard();
 
             String messageBody = qa.getMessage();
             mEditTextMessage.setText("");
-            new SmsSenderThread(mPagerAdapter.getCurrentSender(), messageBody).start();
+            new SmsSenderThread(this, new Message(mPagerAdapter.getCurrentSender(), messageBody))
+                    .start();
             removeFragment(mPagerAdapter.getCurrentSender());
-        }else if (TYPE == OverflowLayout.TYPE_EDIT){
+        } else if (TYPE == OverflowLayout.TYPE_EDIT) {
             mEditTextMessage.setText(qa.getMessage());
             mEditTextMessage.requestFocus();
             mEditTextMessage.setSelection(qa.getMessage().length());
             showKeyboard();
         }
     }
-
 
 
     @Override
@@ -254,4 +263,6 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     public void closeQuickAnswersMenu() {
         mOverflowMenu.close();
     }
+
+
 }

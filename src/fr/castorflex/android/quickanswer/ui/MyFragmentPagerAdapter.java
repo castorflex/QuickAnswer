@@ -1,10 +1,12 @@
 package fr.castorflex.android.quickanswer.ui;
 
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 import fr.castorflex.android.quickanswer.libs.FragmentStatePagerAdapter;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.SmsProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,8 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
     private int mCurrentPosition;
 
 
-    public MyFragmentPagerAdapter(PopupActivity activity, FragmentManager fm, HashMap<String, List<Message>> map, List<String> senders) {
+    public MyFragmentPagerAdapter(PopupActivity activity, FragmentManager fm,
+                                  HashMap<String, List<Message>> map, List<String> senders) {
         super(fm);
         mData = map;
         mSenders = senders;
@@ -35,7 +38,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
 
     @Override
     public int getCount() {
-        return mSenders == null ? 0 : mSenders.size();  //To change body of implemented methods use File | Settings | File Templates.
+        return mSenders == null ? 0 : mSenders.size();
     }
 
     public MessageFragment getItem(int position) {
@@ -48,7 +51,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
     public void startUpdate(ViewGroup container) {
     }
 
-    public void addSmsMessage(Message msg) {
+    public void addSmsMessage(final Message msg) {
         if (!mData.containsKey(msg.getSender())) {
             mData.put(msg.getSender(), new ArrayList<Message>());
             mSenders.add(msg.getSender());
@@ -57,24 +60,15 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
 
         notifyDataSetChanged();
 
-    }
-
-    private void notifyPrevNext(int position) {
-        //prev
-//        for (int i = position - 1; i >= 0; --i) {
-//            MessageFragment prev = (MessageFragment) mFragments.get(i);
-//            if (prev != null) {
-//                prev.notifyNext();
-//            }
-//        }
-
-        //next
-//        for (int i = position + 1; i < mFragments.size(); ++i) {
-//            MessageFragment next = (MessageFragment) mFragments.get(i);
-//            if (next != null) {
-//                next.notifyPrev();
-//            }
-//        }
+        if (mSenders.get(mCurrentPosition).equals(msg.getSender())) {
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SmsProvider.setSmsAsRead(mActivity, msg);
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -106,6 +100,8 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
             mActivity.hideKeyboard();
             mActivity.closeQuickAnswersMenu();
             mActivity.clearEditText();
+
+            SmsProvider.setSmsAsRead(mActivity, mData.get(mSenders.get(position)));
         } catch (Exception e) {
         }
     }

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QuickAnswer</string>
+    <string name="app_name">Quick Answer</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="valid">Valid</string>
+    <string name="cancel">Cancel</string>
     <string name="contentDescription_icon">Image</string>
     <string name="edittext_hint">Type answer</string>
+    <string name="edittext_hint_qa">Type your quick answer</string>
+    <string name="loading">Loading&#8230;</string>
 
     <string name="menu_refresh">Refresh</string>
     <string name="menu_search">Search</string>

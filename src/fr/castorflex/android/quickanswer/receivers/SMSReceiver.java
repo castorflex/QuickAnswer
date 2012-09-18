@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
-import fr.castorflex.android.quickanswer.ui.PopupActivity;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.SettingsProvider;
+import fr.castorflex.android.quickanswer.ui.PopupActivity;
 
 import java.util.ArrayList;
 
@@ -28,28 +29,30 @@ public class SMSReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mContext = context;
-        String action = intent.getAction();
-        if (action.equals(SMS_RECEIVED)) {
-            TelephonyManager mgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (SettingsProvider.isAppEnabled(context)) {
+            mContext = context;
+            String action = intent.getAction();
+            if (action.equals(SMS_RECEIVED)) {
+                TelephonyManager mgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-            addSMSToStack(intent.getExtras());
-            if (mgr.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-                notifyPopup(context);
-            } else {
-                if (mListener == null) {
-                    initListener(mgr);
+                addSMSToStack(intent.getExtras());
+                if (mgr.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+                    notifyPopup(context);
+                } else {
+                    if (mListener == null) {
+                        initListener(mgr);
+                    }
                 }
             }
         }
     }
 
     private void notifyPopup(Context context) {
-            Intent i = new Intent(context, PopupActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putParcelableArrayListExtra("listpdus", mMessageList);
-            context.startActivity(i);
-            mMessageList.clear();
+        Intent i = new Intent(context, PopupActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putParcelableArrayListExtra("listpdus", mMessageList);
+        context.startActivity(i);
+        mMessageList.clear();
     }
 
     private void addSMSToStack(Bundle extras) {
@@ -70,7 +73,7 @@ public class SMSReceiver extends BroadcastReceiver {
             public void onCallStateChanged(int state, String incomingNumber) {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE:
-                        if(mMessageList != null && mMessageList.size() > 0){
+                        if (mMessageList != null && mMessageList.size() > 0) {
                             notifyPopup(mContext);
                         }
                         break;

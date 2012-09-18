@@ -151,6 +151,10 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
         notifyClick(qa, TYPE_EDIT);
     }
 
+    public void updateAdapter(){
+        mAdapter.updateItems();
+    }
+
     class QuickAnswersAdapter extends BaseAdapter {
 
         private List<QuickAnswer> mData;
@@ -159,6 +163,11 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
         public QuickAnswersAdapter() {
             mData = SettingsProvider.getQuickAnswers(mContext);
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        public void updateItems(){
+            mData = SettingsProvider.getQuickAnswers(mContext);
+            notifyDataSetChanged();
         }
 
         @Override
