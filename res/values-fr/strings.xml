@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quick Answer</string>
+    <string name="add">Ajouter</string>
+    <string name="edit">Editer</string>
+    <string name="valid">Valider</string>
+    <string name="cancel">Annuler</string>
+    <string name="dismiss">Fermer</string>
+    <string name="contentDescription_icon">Image</string>
+    <string name="edittext_hint">Tapez votre réponse</string>
+    <string name="edittext_hint_qa">Tapez votre quick answer</string>
+    <string name="loading">Chargement&#8230;</string>
+
+    <string name="menu_refresh">Rafraichir</string>
+    <string name="menu_search">Rechercher</string>
+    <string name="menu_share">Partager</string>
+    <string name="pref_about_title">À propos</string>
+    <string name="pref_about_version">Version de l\'application</string>
+    <string name="pref_about_about">À propos</string>
+    <string name="pref_about_about_summary">À propos de application</string>
+    <string name="pref_general_qa_summary">Cliquer pour modifier vos quick answers</string>
+    <string name="pref_general_qa">Quick Answers</string>
+    <string name="pref_general_qa_activation_summary_true">Cocher pour activer Quick Answer</string>
+    <string name="pref_general_qa_activation_summary_false">Décocher pour désactiver Quick Answer</string>
+    <string name="pref_general_qa_activation">Enable Quick Answer</string>
+    <string name="pref_general_title">Général</string>
+    <string name="pref_about_rate">Noter</string>
+    <string name="pref_about_rate_summary">Cliquer pour noter l\'application</string>
+    <string name="about_text">Cette application fait apparaître un popup lorsqu\'un SMS est reçu, et fournit différents moyens pour répondre rapidement.\n\nÀ propos du développeur:\nJ\'ai créé cette application sur mon temps libre, donc soyez indulgents si vous rencontrez quelques bugs :)\nNe pas hésiter à me contacter par email / twitter si vous avez des remarques, commentaires, ou des idées de fonctionnalités à ajouter.\n\nGoogle+: http://plus.google.com/u/0/108486473528609847558/posts\nTwitter: https://twitter.com/ygort"\nMail: castorflex@gmail.com</string>
+
+
+    <string-array name="array_default_qa" >
+        <item>Oui.</item>
+        <item>Non.</item>
+        <item>Merci.</item>
+        <item>À plus tard.</item>
+        <item>OK.</item>
+    </string-array>
+</resources>

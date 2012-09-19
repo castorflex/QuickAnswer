@@ -1,16 +1,23 @@
 package fr.castorflex.android.quickanswer;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.Window;
+import android.widget.TextView;
 import fr.castorflex.android.quickanswer.libs.actionbar.ActionBarPreferenceActivity;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.QuickAnswersActivity;
+import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
 public class SettingsActivity extends ActionBarPreferenceActivity {
 
@@ -21,7 +28,7 @@ public class SettingsActivity extends ActionBarPreferenceActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
             requestWindowFeature(Window.FEATURE_CUSTOM_TITLE); // add this line
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
@@ -50,6 +57,33 @@ public class SettingsActivity extends ActionBarPreferenceActivity {
 
     }
 
+    private void showAboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final TextView tv = new TextView(this);
+        tv.setPadding(MeasuresUtils.DpToPx(4),
+                MeasuresUtils.DpToPx(4),
+                MeasuresUtils.DpToPx(4),
+                MeasuresUtils.DpToPx(4));
+//        CharSequence cs = getText(R.string.about_text);
+//        String str = getText(R.string.about_text).toString();
+//        tv.setText(Html.fromHtml(getText(R.string.about_text).toString()));
+//        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        tv.setText(getText(R.string.about_text));
+        Linkify.addLinks(tv, Linkify.ALL);
+
+        builder.setTitle(R.string.pref_about_title)
+                .setView(tv)
+                .setIcon(R.drawable.ic_launcher)
+                .setPositiveButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create().show();
+
+    }
+
     private void launchMarket() {
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -62,7 +96,7 @@ public class SettingsActivity extends ActionBarPreferenceActivity {
     class OnActivationChangeListener implements Preference.OnPreferenceChangeListener {
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
-            SettingsProvider.setAppEnabled(SettingsActivity.this, (Boolean)o);
+            SettingsProvider.setAppEnabled(SettingsActivity.this, (Boolean) o);
             mPrefActivated.setSummary((Boolean) o ?
                     R.string.pref_general_qa_activation_summary_false :
                     R.string.pref_general_qa_activation_summary_true);
@@ -73,6 +107,7 @@ public class SettingsActivity extends ActionBarPreferenceActivity {
     class OnAboutPreferenceClickListener implements Preference.OnPreferenceClickListener {
         @Override
         public boolean onPreferenceClick(Preference preference) {
+            SettingsActivity.this.showAboutDialog();
             return true;
         }
     }
