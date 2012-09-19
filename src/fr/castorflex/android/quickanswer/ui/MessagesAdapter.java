@@ -1,6 +1,7 @@
 package fr.castorflex.android.quickanswer.ui;
 
 import android.content.Context;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class MessagesAdapter extends BaseAdapter {
 
         Message item = getItem(position);
         holder.message.setText(item.getMessage());
+        Linkify.addLinks(holder.message, Linkify.ALL);
         holder.date.setText(mDateFormat.format(item.getDate()));
 
         return vi;
