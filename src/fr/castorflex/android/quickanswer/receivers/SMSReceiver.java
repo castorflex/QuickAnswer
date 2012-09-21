@@ -36,8 +36,6 @@ public class SMSReceiver extends BroadcastReceiver {
 
     public static final String SMS_PACKAGE = "com.android.mms";
     public static final String SMS_RECEIVER = SMS_PACKAGE + ".transaction.SmsReceiver";
-    public static final String SENT_ACTION =
-            "com.android.mms.transaction.MESSAGE_SENT";
 
     private PhoneStateListener mListener;
     private ArrayList<Message> mMessageList;
