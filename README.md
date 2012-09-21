@@ -7,7 +7,6 @@ This is a simple app which displays sms popup and allow user to answer quickly.
 Possibility to see many sms in a single popup, sorted by senders.
 
 Actual Version : v0.1 alpha (first)
-----------------
 
 License
 -------
