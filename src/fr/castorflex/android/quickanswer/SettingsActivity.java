@@ -9,17 +9,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.preference.PreferenceActivity;
 import android.text.util.Linkify;
 import android.view.Window;
 import android.widget.TextView;
-import fr.castorflex.android.quickanswer.libs.actionbar.ActionBarPreferenceActivity;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.QuickAnswersActivity;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
-public class SettingsActivity extends ActionBarPreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
 
     private CheckBoxPreference mPrefActivated;
 
@@ -65,10 +63,6 @@ public class SettingsActivity extends ActionBarPreferenceActivity {
                 MeasuresUtils.DpToPx(4),
                 MeasuresUtils.DpToPx(4),
                 MeasuresUtils.DpToPx(4));
-//        CharSequence cs = getText(R.string.about_text);
-//        String str = getText(R.string.about_text).toString();
-//        tv.setText(Html.fromHtml(getText(R.string.about_text).toString()));
-//        tv.setMovementMethod(LinkMovementMethod.getInstance());
         tv.setText(getText(R.string.about_text));
         Linkify.addLinks(tv, Linkify.ALL);
 

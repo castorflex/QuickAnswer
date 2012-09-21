@@ -1,5 +1,6 @@
 package fr.castorflex.android.quickanswer.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import fr.castorflex.android.quickanswer.R;
-import fr.castorflex.android.quickanswer.libs.actionbar.ActionBarActivity;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
@@ -21,7 +21,7 @@ import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
  * Time: 15:33
  * To change this template use File | Settings | File Templates.
  */
-public class QuickAnswersActivity extends ActionBarActivity {
+public class QuickAnswersActivity extends Activity {
 
     private ListView mListView;
     private QuickAnswersAdapter mAdapter;
@@ -35,6 +35,7 @@ public class QuickAnswersActivity extends ActionBarActivity {
 
         mAdapter = new QuickAnswersAdapter(this);
         mListView.setAdapter(mAdapter);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -49,6 +50,9 @@ public class QuickAnswersActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menu_new:
                 showEditDialog(-1, null);
+                return true;
+            case android.R.id.home:
+                finish();
                 return true;
         }
 

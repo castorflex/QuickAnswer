@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -62,7 +63,9 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
 
         setContentView(R.layout.popup_layout);
-        setFinishOnTouchOutside(false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            setFinishOnTouchOutside(false);
 
         mSettingsButton = (ImageView) findViewById(R.id.imageView_settings);
         mOverflowMenu = (OverflowLayout) findViewById(R.id.overflowmenu);
@@ -104,8 +107,6 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
         populateAdapterFromBundle(getIntent().getExtras());
     }
-
-
 
 
     @Override

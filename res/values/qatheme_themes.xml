@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="qatheme" parent="android:Theme.Light">
+
+    <item name="android:editTextStyle">@style/EditTextqatheme</item>
+
+    <item name="android:listViewStyle">@style/ListViewqatheme</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewqatheme.White</item>
+
+  </style>
+
+</resources>

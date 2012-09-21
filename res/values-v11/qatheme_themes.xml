@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="qatheme" parent="android:Theme.Holo.Light">
+
+    <item name="android:editTextBackground">@drawable/edit_text_holo_light</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_holo_light</item>
+
+  </style>
+
+</resources>

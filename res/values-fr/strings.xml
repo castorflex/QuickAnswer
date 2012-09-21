@@ -22,7 +22,7 @@
     <string name="pref_general_qa">Quick Answers</string>
     <string name="pref_general_qa_activation_summary_true">Cocher pour activer Quick Answer</string>
     <string name="pref_general_qa_activation_summary_false">Décocher pour désactiver Quick Answer</string>
-    <string name="pref_general_qa_activation">Enable Quick Answer</string>
+    <string name="pref_general_qa_activation">Activer Quick Answer</string>
     <string name="pref_general_title">Général</string>
     <string name="pref_about_rate">Noter</string>
     <string name="pref_about_rate_summary">Cliquer pour noter l\'application</string>
