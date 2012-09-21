@@ -28,12 +28,17 @@ import java.util.List;
  */
 public class MessageFragment extends Fragment {
 
+    private static final String ARG_LIST = "arg_list";
+    private static final String ARG_SENDER = "arg_sender";
+    private static final String ARG_LEFT = "arg_left";
+    private static final String ARG_RIGHT = "arg_right";
+
     private static final int ANIM_DURATION = 700;
 
     private String mIdSender;
     private ListView mListView;
     private MessagesAdapter mAdapter;
-    private List<Message> mInitData;
+    private ArrayList<Message> mInitData;
     private LinearLayout mActionbar;
     private Contact mContact;
 
@@ -46,13 +51,46 @@ public class MessageFragment extends Fragment {
     protected AlphaAnimation mFadeAnimation = new AlphaAnimation(0.0f, 1.0f);
 
 
-    public MessageFragment(String sender, List<Message> data, boolean leftIndic, boolean rightIndic) {
-        mInitData = data;
-        mIdSender = sender;
-        mIsLeftIndicActivated = leftIndic;
-        mIsRightIndicActivated = rightIndic;
+    public static MessageFragment newInstance(String sender, ArrayList<Message> data,
+                                              boolean leftIndic, boolean rightIndic)
+    {
+        MessageFragment instance = new MessageFragment();
+        Bundle b = new Bundle();
+        b.putBoolean(ARG_LEFT, leftIndic);
+        b.putBoolean(ARG_RIGHT, rightIndic);
+        b.putString(ARG_SENDER, sender);
+        b.putParcelableArrayList(ARG_LIST, data);
+
+        instance.setArguments(b);
+        return instance;
     }
 
+
+    public MessageFragment(){
+        super();
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle b) {
+        b.putBoolean(ARG_LEFT, mIsLeftIndicActivated);
+        b.putBoolean(ARG_RIGHT, mIsRightIndicActivated);
+        b.putString(ARG_SENDER, mIdSender);
+        b.putParcelableArrayList(ARG_LIST, mInitData);
+        super.onSaveInstanceState(b);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+
+        mInitData = getArguments().getParcelableArrayList(ARG_LIST);
+        mIdSender = getArguments().getString(ARG_SENDER);
+        mIsLeftIndicActivated = getArguments().getBoolean(ARG_LEFT);
+        mIsRightIndicActivated = getArguments().getBoolean(ARG_RIGHT);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

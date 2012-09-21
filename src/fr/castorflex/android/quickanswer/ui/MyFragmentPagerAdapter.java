@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
 
-    private HashMap<String, List<Message>> mData;
+    private HashMap<String, ArrayList<Message>> mData;
     private List<String> mSenders;
     private PopupActivity mActivity;
 
@@ -29,7 +29,7 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
 
 
     public MyFragmentPagerAdapter(PopupActivity activity, FragmentManager fm,
-                                  HashMap<String, List<Message>> map, List<String> senders) {
+                                  HashMap<String, ArrayList<Message>> map, List<String> senders) {
         super(fm);
         mData = map;
         mSenders = senders;
@@ -42,9 +42,8 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
     }
 
     public MessageFragment getItem(int position) {
-        return new MessageFragment(mSenders.get(position), mData.get(mSenders.get(position)),
-                position > 0, position < mSenders.size() - 1
-        );
+        return MessageFragment.newInstance(mSenders.get(position), mData.get(mSenders.get(position)),
+                position > 0, position < mSenders.size() - 1);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mViewPager = (CustomViewPager) findViewById(R.id.viewPager);
 
 
-        mPagerAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, List<Message>>(), new ArrayList<String>());
+        mPagerAdapter = new MyFragmentPagerAdapter(this, getSupportFragmentManager(), new HashMap<String, ArrayList<Message>>(), new ArrayList<String>());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setPageMargin(1);
         mViewPager.setPageMarginDrawable(R.drawable.viewpager_margin);
