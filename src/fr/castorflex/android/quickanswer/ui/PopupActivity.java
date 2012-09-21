@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
     private FixedSpeedScroller mNewScroller;
 
 
+    private ImageView mCallButton;
     private ImageView mSmsAppButton;
     private ImageView mOverflowButton;
     private ImageView mSettingsButton;
@@ -71,6 +73,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mOverflowMenu = (OverflowLayout) findViewById(R.id.overflowmenu);
         mOverflowButton = (ImageView) findViewById(R.id.imageView_overflow);
         mSmsAppButton = (ImageView) findViewById(R.id.imageView_sms_app);
+        mCallButton = (ImageView) findViewById(R.id.imageView_call);
         mSendButton = (ImageView) findViewById(R.id.imageButton_send);
         mEditTextMessage = (EditText) findViewById(R.id.editText_message);
         mViewPager = (CustomViewPager) findViewById(R.id.viewPager);
@@ -98,6 +101,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mSendButton.setOnClickListener(this);
         mOverflowButton.setOnClickListener(this);
         mSettingsButton.setOnClickListener(this);
+        mCallButton.setOnClickListener(this);
 
         mOverflowMenu.setOnItemSelectedListener(this);
 
@@ -187,6 +191,10 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         } else if (view == mSettingsButton) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivityForResult(intent, 0);
+        } else if(view == mCallButton){
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + mPagerAdapter.getCurrentSender()));
+            startActivity(callIntent);
         }
     }
 
