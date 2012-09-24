@@ -56,11 +56,9 @@ public abstract class ContactProvider {
 
             Contact contact = null;
             if (c != null && c.getCount() > 0) {
-                Uri photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
-                        c.getLong(2));
-
-
                 if (c.moveToFirst()) {
+                    Uri photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
+                            c.getLong(2));
                     contact = new Contact(c.getString(0), c.getString(1), photoUri.toString());
                 }
             } else {

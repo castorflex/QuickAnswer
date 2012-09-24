@@ -52,8 +52,7 @@ public class MessageFragment extends Fragment {
 
 
     public static MessageFragment newInstance(String sender, ArrayList<Message> data,
-                                              boolean leftIndic, boolean rightIndic)
-    {
+                                              boolean leftIndic, boolean rightIndic) {
         MessageFragment instance = new MessageFragment();
         Bundle b = new Bundle();
         b.putBoolean(ARG_LEFT, leftIndic);
@@ -66,10 +65,9 @@ public class MessageFragment extends Fragment {
     }
 
 
-    public MessageFragment(){
+    public MessageFragment() {
         super();
     }
-
 
 
     @Override
@@ -149,10 +147,13 @@ public class MessageFragment extends Fragment {
     private void initViews() {
         mContact = ContactProvider.getInstance().getContact(mIdSender, getActivity());
         if (mContact != null) {
-            if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0)
-                ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setImageURI(Uri.parse(mContact.getPhoto()));
-            else
-                ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setVisibility(View.GONE);
+            if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0) {
+                ImageView imageView = (ImageView) mActionbar.findViewById(R.id.imageView_actionbar);
+                imageView.setImageURI(Uri.parse(mContact.getPhoto()));
+                if(imageView.getDrawable() == null)
+                    imageView.setVisibility(View.GONE);
+            } else
+                mActionbar.findViewById(R.id.imageView_actionbar).setVisibility(View.GONE);
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_small)).setText(mIdSender);
         } else {
