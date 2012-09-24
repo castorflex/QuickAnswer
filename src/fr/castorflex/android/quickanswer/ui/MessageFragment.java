@@ -1,7 +1,10 @@
 package fr.castorflex.android.quickanswer.ui;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.providers.ContactProvider;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,8 +153,8 @@ public class MessageFragment extends Fragment {
         if (mContact != null) {
             if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0) {
                 ImageView imageView = (ImageView) mActionbar.findViewById(R.id.imageView_actionbar);
-                imageView.setImageURI(Uri.parse(mContact.getPhoto()));
-                if(imageView.getDrawable() == null)
+                setImagePhoto(imageView);
+                if (imageView.getDrawable() == null)
                     imageView.setVisibility(View.GONE);
             } else
                 mActionbar.findViewById(R.id.imageView_actionbar).setVisibility(View.GONE);
@@ -162,6 +166,19 @@ public class MessageFragment extends Fragment {
         }
 
 
+    }
+
+    private void setImagePhoto(ImageView imageView) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+
+            InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(
+                    getActivity().getContentResolver(), Uri.parse(mContact.getPhoto()));
+            if (input != null) {
+                imageView.setImageBitmap(BitmapFactory.decodeStream(input));
+            }
+
+        } else
+            imageView.setImageURI(Uri.parse(mContact.getPhoto()));
     }
 
 

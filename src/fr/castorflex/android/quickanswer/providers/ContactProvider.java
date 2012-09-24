@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
@@ -38,7 +39,6 @@ public abstract class ContactProvider {
 
     public abstract Contact getContact(final String phoneNumber, Context context);
 
-
     public static class ContactProviderV7 extends ContactProvider {
 
         private ContactProviderV7() {
@@ -66,6 +66,7 @@ public abstract class ContactProvider {
             }
             c.close();
             c = null;
+
             return contact;
         }
     }
