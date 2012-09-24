@@ -10,7 +10,7 @@
             android:background="@drawable/bg_selector"
             android:src="@drawable/selector_send"
             android:layout_width="48dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:padding="4dp"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"/>

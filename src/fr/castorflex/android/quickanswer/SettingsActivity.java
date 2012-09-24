@@ -10,6 +10,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.text.util.Linkify;
+import android.view.ContextThemeWrapper;
 import android.widget.TextView;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.QuickAnswersActivity;
@@ -52,7 +53,7 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
     }
 
     private void showAboutDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.QAPopup));
 
         final TextView tv = new TextView(this);
         tv.setPadding(MeasuresUtils.DpToPx(4),
