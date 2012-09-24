@@ -147,9 +147,9 @@ public class MessageFragment extends Fragment {
     }
 
     private void initViews() {
-        mContact = ContactProvider.getContactName(mIdSender, getActivity());
+        mContact = ContactProvider.getInstance().getContact(mIdSender, getActivity());
         if (mContact != null) {
-            if (mContact.getPhoto() != null)
+            if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0)
                 ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setImageURI(Uri.parse(mContact.getPhoto()));
             else
                 ((ImageView) mActionbar.findViewById(R.id.imageView_actionbar)).setVisibility(View.GONE);

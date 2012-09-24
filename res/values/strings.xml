@@ -10,6 +10,7 @@
     <string name="edittext_hint">Type answer</string>
     <string name="edittext_hint_qa">Type your quick answer</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="unknown">Unknown</string>
 
     <string name="menu_refresh">Refresh</string>
     <string name="menu_search">Search</string>

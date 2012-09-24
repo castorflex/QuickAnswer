@@ -4,7 +4,8 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:minHeight="48dp"
-              android:orientation="horizontal">
+              android:orientation="horizontal"
+              android:background="@drawable/bg_selector">
 
     <TextView android:id="@+id/textView_qa_text"
               android:layout_width="0dp"
@@ -12,7 +13,7 @@
               android:layout_gravity="center_vertical"
               android:layout_weight="1"
               android:layout_margin="4dp"
-              android:textColor="@color/textview_background_dark"/>
+              android:textColor="@color/textview_background_light"/>
 
     <View android:layout_width="1dp"
           android:layout_height="match_parent"

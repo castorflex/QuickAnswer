@@ -39,16 +39,18 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.0.3 Google APIs" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="library" name="gson-2.2.2" level="project" />
+    <orderEntry type="library" name="src" level="project" />
+    <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/android-support-v13.jar!/" />
+          <root url="jar://$USER_HOME$/Android/android-sdk-macosx/extras/android/support/v4/android-support-v4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="gson-2.2.2" level="project" />
+    <orderEntry type="module" module-name="Library" />
   </component>
 </module>
 

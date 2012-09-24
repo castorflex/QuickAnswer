@@ -3,11 +3,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground">
+                android:background="@drawable/bg_selector">
 
     <ImageView
             android:id="@+id/imageView_send"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="@drawable/bg_selector"
             android:src="@drawable/selector_send"
             android:layout_width="48dp"
             android:layout_height="wrap_content"

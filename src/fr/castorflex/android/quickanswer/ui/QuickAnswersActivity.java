@@ -1,11 +1,12 @@
 package fr.castorflex.android.quickanswer.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,7 +22,7 @@ import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
  * Time: 15:33
  * To change this template use File | Settings | File Templates.
  */
-public class QuickAnswersActivity extends Activity {
+public class QuickAnswersActivity extends com.actionbarsherlock.app.SherlockActivity {
 
     private ListView mListView;
     private QuickAnswersAdapter mAdapter;
@@ -35,18 +36,21 @@ public class QuickAnswersActivity extends Activity {
 
         mAdapter = new QuickAnswersAdapter(this);
         mListView.setAdapter(mAdapter);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setIcon(R.drawable.ic_launcher);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+        com.actionbarsherlock.view.MenuInflater inflater = getSherlock().getMenuInflater();
         inflater.inflate(R.menu.menu_settings_qa, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemSelected(int featureId, com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new:
                 showEditDialog(-1, null);
@@ -55,12 +59,11 @@ public class QuickAnswersActivity extends Activity {
                 finish();
                 return true;
         }
-
-        return super.onOptionsItemSelected(item);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.onMenuItemSelected(featureId, item);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     public void showEditDialog(final int position, final QuickAnswer item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.QAPopup));
         builder.setTitle(position >= 0 ? R.string.edit : R.string.add);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

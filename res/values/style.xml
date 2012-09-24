@@ -1,0 +1,7 @@
+<resources>
+    <style name="AlertDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:centerDark">@drawable/popup_center_bright</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+</resources>

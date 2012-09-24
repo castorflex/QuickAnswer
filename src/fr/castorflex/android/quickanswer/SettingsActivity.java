@@ -5,19 +5,17 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.text.util.Linkify;
-import android.view.Window;
 import android.widget.TextView;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.QuickAnswersActivity;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferenceActivity {
 
     private CheckBoxPreference mPrefActivated;
 
@@ -26,8 +24,6 @@ public class SettingsActivity extends PreferenceActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            requestWindowFeature(Window.FEATURE_CUSTOM_TITLE); // add this line
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 

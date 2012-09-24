@@ -10,6 +10,8 @@
     <string name="edittext_hint">Tapez votre réponse</string>
     <string name="edittext_hint_qa">Tapez votre quick answer</string>
     <string name="loading">Chargement&#8230;</string>
+    <string name="unknown">Inconnu</string>
+
 
     <string name="menu_refresh">Rafraichir</string>
     <string name="menu_search">Rechercher</string>

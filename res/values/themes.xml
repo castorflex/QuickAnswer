@@ -4,4 +4,9 @@
         <item name="android:background">@drawable/background_dark</item>
     </style>
 
+    <style name="QAPopup" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <!-- Any customizations for your app running on pre-3.0 devices here -->
+        <item name="android:alertDialogStyle">@style/AlertDialog</item>
+    </style>
+
 </resources>
