@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.ui;
+package fr.castorflex.android.quickanswer.ui.popup;
 
 import android.content.Context;
 import android.text.util.Linkify;

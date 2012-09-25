@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.providers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.castorflex.android.quickanswer.R;
@@ -21,9 +22,6 @@ import java.util.List;
  */
 public class SettingsProvider {
 
-    public static QuickAnswer[] DEFAULT_QA;
-
-    private static final String KEY_ENABLED = "enabled";
     private static final String KEY_QA = "qa";
 
 
@@ -38,19 +36,12 @@ public class SettingsProvider {
     }
 
     public static SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences(context.getApplicationInfo().packageName, Context.MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public static boolean isAppEnabled(Context context) {
         SharedPreferences prefs = getSharedPreferences(context);
-        return prefs.getBoolean(KEY_ENABLED, true);
-    }
-
-    public static void setAppEnabled(Context context, boolean value) {
-        SharedPreferences prefs = getSharedPreferences(context);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean(KEY_ENABLED, value);
-        edit.commit();
+        return prefs.getBoolean(context.getString(R.string.pref_key_qa_activate), true);
     }
 
     public static ArrayList<QuickAnswer> getQuickAnswers(Context context) {
@@ -85,5 +76,8 @@ public class SettingsProvider {
         editor.commit();
     }
 
-
+    public static boolean isNotifEnabled(Context context) {
+        SharedPreferences prefs = getSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.pref_key_notif_activate), false);
+    }
 }

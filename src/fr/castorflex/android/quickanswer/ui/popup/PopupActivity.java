@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.ui;
+package fr.castorflex.android.quickanswer.ui.popup;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import fr.castorflex.android.quickanswer.R;
-import fr.castorflex.android.quickanswer.SettingsActivity;
+import fr.castorflex.android.quickanswer.ui.settings.SettingsActivity;
 import fr.castorflex.android.quickanswer.libs.CustomViewPager;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
 import fr.castorflex.android.quickanswer.libs.OverflowLayout;

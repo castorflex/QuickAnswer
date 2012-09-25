@@ -51,6 +51,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="Library" />
+    <orderEntry type="library" scope="PROVIDED" name="library-4.1.0" level="project" />
   </component>
 </module>
 
