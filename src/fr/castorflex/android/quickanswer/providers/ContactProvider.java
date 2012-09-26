@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
@@ -60,6 +59,8 @@ public abstract class ContactProvider {
                     Uri photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
                             c.getLong(2));
                     contact = new Contact(c.getString(0), c.getString(1), photoUri.toString());
+                } else {
+                    contact = new Contact(context.getString(R.string.unknown), phoneNumber, null);
                 }
             } else {
                 contact = new Contact(context.getString(R.string.unknown), phoneNumber, null);
@@ -89,6 +90,8 @@ public abstract class ContactProvider {
             Contact contact = null;
             if (c.moveToFirst()) {
                 contact = new Contact(c.getString(0), c.getString(1), c.getString(2));
+            } else {
+                contact = new Contact(context.getString(R.string.unknown), phoneNumber, null);
             }
             c.close();
             c = null;
