@@ -29,7 +29,6 @@
         <RingtonePreference
                 android:ringtoneType="notification"
                 android:title="@string/pref_notif_ringtone"
-                android:summary="@string/pref_notif_ringtone_summary"
                 android:key="@string/pref_key_notif_ringtone"
                 android:dependency="notif_activate"
                 android:showDefault="true"
