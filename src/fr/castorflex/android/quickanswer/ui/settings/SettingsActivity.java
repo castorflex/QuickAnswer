@@ -4,9 +4,10 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.RingtonePreference;
 import android.text.util.Linkify;
@@ -31,13 +32,16 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
         Preference prefVersion = findPreference(getString(R.string.pref_key_version));
         Preference prefAbout = findPreference(getString(R.string.pref_key_about));
         Preference prefRate = findPreference(getString(R.string.pref_key_rate));
+        RingtonePreference prefRing = (RingtonePreference) findPreference(getString(R.string.pref_key_notif_ringtone));
 
+        prefRing.setSummary(SettingsProvider.getRingtoneName(this));
         prefVersion.setSummary(SettingsProvider.getApplicationVersion(this));
 
         //Init des Listeners
         prefQA.setOnPreferenceClickListener(new OnQuickAnswerPreferenceClickListener());
         prefAbout.setOnPreferenceClickListener(new OnAboutPreferenceClickListener());
         prefRate.setOnPreferenceClickListener(new OnRatePreferenceClickListener());
+        prefRing.setOnPreferenceChangeListener(new OnRingtonePreferenceChangeListener());
     }
 
     private void showAboutDialog() {
@@ -61,6 +65,12 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
                 })
                 .create().show();
 
+    }
+
+    private String getRingtoneName(String strRingtonePreference){
+        Uri ringtoneUri = Uri.parse(strRingtonePreference);
+        Ringtone ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
+        return ringtone.getTitle(this);
     }
 
     private void launchMarket() {
@@ -93,6 +103,14 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
         public boolean onPreferenceClick(Preference preference) {
             Intent intent = new Intent(SettingsActivity.this, QuickAnswersActivity.class);
             SettingsActivity.this.startActivity(intent);
+            return true;
+        }
+    }
+
+    class OnRingtonePreferenceChangeListener implements Preference.OnPreferenceChangeListener{
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+            preference.setSummary(SettingsProvider.getRingtoneName(SettingsActivity.this, (String)o));
             return true;
         }
     }

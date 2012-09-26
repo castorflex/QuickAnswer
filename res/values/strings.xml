@@ -19,6 +19,7 @@
     </string>
     <string name="message_sending">Sending&#8230;</string>
     <string name="message_sent">Message sent!</string>
+    <string name="silent">Silent</string>
 
 
     <string name="menu_refresh">Refresh</string>
