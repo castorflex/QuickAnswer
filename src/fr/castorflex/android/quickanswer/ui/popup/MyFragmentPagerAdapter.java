@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.ui;
+package fr.castorflex.android.quickanswer.ui.popup;
 
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer.ui;
+package fr.castorflex.android.quickanswer.ui.settings;
 
 import android.app.AlertDialog;
 import android.content.Context;

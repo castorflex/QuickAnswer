@@ -13,8 +13,9 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
-import fr.castorflex.android.quickanswer.ui.PopupActivity;
+import fr.castorflex.android.quickanswer.ui.popup.PopupActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +91,7 @@ public class SMSReceiver extends BroadcastReceiver {
         mResultCode = getResultCode();
         switch (mResultCode) {
             case Activity.RESULT_OK:
+                NotificationsProvider.getInstance().notifySent(context);
                 msg.what = MESSAGE_OK;
                 smsSentHandler.sendMessage(msg);
                 break;
@@ -104,6 +106,8 @@ public class SMSReceiver extends BroadcastReceiver {
     }
 
     private void notifyPopup(Context context) {
+        NotificationsProvider.getInstance().notifySmsReceived(context);
+
         Intent i = new Intent(context, PopupActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putParcelableArrayListExtra("listpdus", mMessageList);
