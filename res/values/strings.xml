@@ -17,6 +17,8 @@
         add.\n\nGoogle+: http://plus.google.com/u/0/108486473528609847558/posts\nTwitter:
         https://twitter.com/ygort"\nMail: castorflex@gmail.com
     </string>
+    <string name="message_sending">Sending&#8230;</string>
+    <string name="message_sent">Message sent!</string>
 
 
     <string name="menu_refresh">Refresh</string>

@@ -11,6 +11,8 @@
     <string name="edittext_hint_qa">Tapez votre quick answer</string>
     <string name="loading">Chargement&#8230;</string>
     <string name="unknown">Inconnu</string>
+    <string name="message_sending">Envoi&#8230;</string>
+    <string name="message_sent">Message envoyé !</string>
 
 
     <string name="menu_refresh">Rafraichir</string>

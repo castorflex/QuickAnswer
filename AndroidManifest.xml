@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="fr.castorflex.android.quickanswer"
-          android:versionCode="4"
-          android:versionName="0.2.1 alpha">
+          android:versionCode="5"
+          android:versionName="0.3.0 alpha">
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="15"/>
 
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
 
     <uses-feature android:name="android.hardware.telephony" android:required="true"/>
 

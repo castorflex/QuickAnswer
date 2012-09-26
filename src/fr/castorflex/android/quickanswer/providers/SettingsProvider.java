@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.providers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,5 +80,31 @@ public class SettingsProvider {
     public static boolean isNotifEnabled(Context context) {
         SharedPreferences prefs = getSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.pref_key_notif_activate), false);
+    }
+
+    public static boolean isVibrateEnabled(Context context) {
+        if (!isAppEnabled(context))
+            return false;
+        if (!isNotifEnabled(context))
+            return false;
+
+        return getSharedPreferences(context).getBoolean(
+                context.getString(R.string.pref_key_notif_vibrate), false);
+    }
+
+    public static boolean isRingtoneEnabled(Context context) {
+        if (!isAppEnabled(context))
+            return false;
+        if (!isNotifEnabled(context))
+            return false;
+        String ringtone = getSharedPreferences(context).getString(
+                context.getString(R.string.pref_key_notif_ringtone), "");
+        return ringtone != null && ringtone.length() > 0;
+    }
+
+
+    public static Uri getRingtoneUri(Context context) {
+        SharedPreferences prefs = getSharedPreferences(context);
+        return Uri.parse(prefs.getString(context.getString(R.string.pref_key_notif_ringtone), ""));
     }
 }
