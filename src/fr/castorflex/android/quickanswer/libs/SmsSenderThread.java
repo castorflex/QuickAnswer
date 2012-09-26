@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.SmsManager;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
 import fr.castorflex.android.quickanswer.receivers.SMSReceiver;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class SmsSenderThread extends Thread {
                                         setClass(c, SMSReceiver.class),
                                 0));
                     }
+                    NotificationsProvider.getInstance().notifySending(c);
                     smsManager.sendMultipartTextMessage(msg.getSender(), null, mess, sentIntents, null);
 
                 }

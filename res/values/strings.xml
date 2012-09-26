@@ -11,10 +11,21 @@
     <string name="edittext_hint_qa">Type your quick answer</string>
     <string name="loading">Loading&#8230;</string>
     <string name="unknown">Unknown</string>
+    <string name="about_text">This application shows a popup when you receive a SMS, and provides some ways to answer
+        quickly.\n\nAbout the developer:\nI made this application during my free time, so please be indulgent if you
+        find some bugs :)\nFeel free to email / tweet me if you have any comment, or any idea of functionalities to
+        add.\n\nGoogle+: http://plus.google.com/u/0/108486473528609847558/posts\nTwitter:
+        https://twitter.com/ygort"\nMail: castorflex@gmail.com
+    </string>
+    <string name="message_sending">Sending&#8230;</string>
+    <string name="message_sent">Message sent!</string>
+
 
     <string name="menu_refresh">Refresh</string>
     <string name="menu_search">Search</string>
     <string name="menu_share">Share</string>
+
+    <!--Preferences-->
     <string name="pref_about_title">About</string>
     <string name="pref_about_version">Application Version</string>
     <string name="pref_about_about">About</string>
@@ -27,10 +38,25 @@
     <string name="pref_general_title">General</string>
     <string name="pref_about_rate">Rate</string>
     <string name="pref_about_rate_summary">Click to rate the application</string>
+    <string name="pref_general_notif_activation">Enable Notifications</string>
+    <string name="pref_general_notif_activation_summary_true">Click to disable notifications</string>
+    <string name="pref_general_notif_activation_summary_false">Click to enable notifications</string>
+    <string name="notifications">Notifications</string>
+    <string name="pref_notif_ringtone">Notification ringtone</string>
+    <string name="pref_notif_ringtone_summary">Click to change the notification ringtone</string>
+    <string name="pref_notif_vibrate">Vibrate</string>
 
-    <string name="about_text">This application shows a popup when you receive a SMS, and provides some ways to answer quickly.\n\nAbout the developer:\nI made this application during my free time, so please be indulgent if you find some bugs :)\nFeel free to email / tweet me if you have any comment, or any idea of functionalities to add.\n\nGoogle+: http://plus.google.com/u/0/108486473528609847558/posts\nTwitter: https://twitter.com/ygort"\nMail: castorflex@gmail.com</string>
+    <!--PREF KEYS-->
+    <string name="pref_key_qa_activate">qa_activate</string>
+    <string name="pref_key_qa_manage">qa_manage</string>
+    <string name="pref_key_notif_activate">notif_activate</string>
+    <string name="pref_key_notif_ringtone">notif_ringtone</string>
+    <string name="pref_key_notif_vibrate">notif_vibrate</string>
+    <string name="pref_key_rate">rate</string>
+    <string name="pref_key_about">about</string>
+    <string name="pref_key_version">version</string>
 
-    <string-array name="array_default_qa" >
+    <string-array name="array_default_qa">
         <item>Yes.</item>
         <item>No.</item>
         <item>Thank you.</item>

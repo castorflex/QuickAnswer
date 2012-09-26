@@ -11,11 +11,15 @@
     <string name="edittext_hint_qa">Tapez votre quick answer</string>
     <string name="loading">Chargement&#8230;</string>
     <string name="unknown">Inconnu</string>
+    <string name="message_sending">Envoi&#8230;</string>
+    <string name="message_sent">Message envoyé !</string>
 
 
     <string name="menu_refresh">Rafraichir</string>
     <string name="menu_search">Rechercher</string>
     <string name="menu_share">Partager</string>
+
+    <!--Preferences-->
     <string name="pref_about_title">À propos</string>
     <string name="pref_about_version">Version de l\'application</string>
     <string name="pref_about_about">À propos</string>
@@ -28,8 +32,14 @@
     <string name="pref_general_title">Général</string>
     <string name="pref_about_rate">Noter</string>
     <string name="pref_about_rate_summary">Cliquer pour noter l\'application</string>
+    <string name="pref_general_notif_activation">Activer les Notifications</string>
+    <string name="pref_general_notif_activation_summary_true">Cliquer pour désactiver les notifications</string>
+    <string name="pref_general_notif_activation_summary_false">Cliquer pour activer les notifications</string>
     <string name="about_text">Cette application fait apparaître un popup lorsqu\'un SMS est reçu, et fournit différents moyens pour répondre rapidement.\n\nÀ propos du développeur:\nJ\'ai créé cette application sur mon temps libre, donc soyez indulgents si vous rencontrez quelques bugs :)\nNe pas hésiter à me contacter par email / twitter si vous avez des remarques, commentaires, ou des idées de fonctionnalités à ajouter.\n\nGoogle+: http://plus.google.com/u/0/108486473528609847558/posts\nTwitter: https://twitter.com/ygort"\nMail: castorflex@gmail.com</string>
-
+    <string name="notifications">Notifications</string>
+    <string name="pref_notif_ringtone">Sonnerie de notification</string>
+    <string name="pref_notif_ringtone_summary">Cliquer pour modifier le son des notifications</string>
+    <string name="pref_notif_vibrate">Vibration</string>
 
     <string-array name="array_default_qa" >
         <item>Oui.</item>

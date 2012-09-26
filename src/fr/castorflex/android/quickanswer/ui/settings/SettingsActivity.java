@@ -1,4 +1,4 @@
-package fr.castorflex.android.quickanswer;
+package fr.castorflex.android.quickanswer.ui.settings;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -8,17 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.RingtonePreference;
 import android.text.util.Linkify;
 import android.view.ContextThemeWrapper;
 import android.widget.TextView;
+import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
-import fr.castorflex.android.quickanswer.ui.QuickAnswersActivity;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
 public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferenceActivity {
-
-    private CheckBoxPreference mPrefActivated;
 
     /**
      * Called when the activity is first created.
@@ -29,27 +27,17 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
         addPreferencesFromResource(R.xml.preferences);
 
         //Recuperation des preferences
-        mPrefActivated = (CheckBoxPreference) findPreference("qa_activate");
-        Preference prefQA = findPreference("manage_qa");
-        Preference prefVersion = findPreference("version");
-        Preference prefAbout = findPreference("about");
-        Preference prefRate = findPreference("rate");
+        Preference prefQA = findPreference(getString(R.string.pref_key_qa_manage));
+        Preference prefVersion = findPreference(getString(R.string.pref_key_version));
+        Preference prefAbout = findPreference(getString(R.string.pref_key_about));
+        Preference prefRate = findPreference(getString(R.string.pref_key_rate));
 
-        //init des vues
-        boolean enabled = SettingsProvider.isAppEnabled(this);
-        mPrefActivated.setChecked(enabled);
-        mPrefActivated.setSummary(enabled ?
-                R.string.pref_general_qa_activation_summary_false :
-                R.string.pref_general_qa_activation_summary_true);
         prefVersion.setSummary(SettingsProvider.getApplicationVersion(this));
 
         //Init des Listeners
-        mPrefActivated.setOnPreferenceChangeListener(new OnActivationChangeListener());
         prefQA.setOnPreferenceClickListener(new OnQuickAnswerPreferenceClickListener());
         prefAbout.setOnPreferenceClickListener(new OnAboutPreferenceClickListener());
         prefRate.setOnPreferenceClickListener(new OnRatePreferenceClickListener());
-
-
     }
 
     private void showAboutDialog() {
@@ -84,17 +72,6 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
         }
     }
 
-    class OnActivationChangeListener implements Preference.OnPreferenceChangeListener {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object o) {
-            SettingsProvider.setAppEnabled(SettingsActivity.this, (Boolean) o);
-            mPrefActivated.setSummary((Boolean) o ?
-                    R.string.pref_general_qa_activation_summary_false :
-                    R.string.pref_general_qa_activation_summary_true);
-            return true;
-        }
-    }
-
     class OnAboutPreferenceClickListener implements Preference.OnPreferenceClickListener {
         @Override
         public boolean onPreferenceClick(Preference preference) {
@@ -119,4 +96,5 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
             return true;
         }
     }
+
 }
