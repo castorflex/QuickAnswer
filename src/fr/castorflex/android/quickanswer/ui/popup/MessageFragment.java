@@ -152,10 +152,12 @@ public class MessageFragment extends Fragment {
         mContact = ContactProvider.getInstance().getContact(mIdSender, getActivity());
         if (mContact != null) {
             if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0) {
-                ImageView imageView = (ImageView) mActionbar.findViewById(R.id.imageView_actionbar);
-                setImagePhoto(imageView);
-                if (imageView.getDrawable() == null)
-                    imageView.setVisibility(View.GONE);
+                QuickContactBadge badge = (QuickContactBadge) mActionbar.findViewById(R.id.imageView_actionbar);
+                badge.assignContactFromPhone(mContact.getNumber(), false);
+
+                setImagePhoto(badge);
+                if (badge.getDrawable() == null)
+                    badge.setImageToDefault();
             } else
                 mActionbar.findViewById(R.id.imageView_actionbar).setVisibility(View.GONE);
             ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
@@ -168,19 +170,18 @@ public class MessageFragment extends Fragment {
 
     }
 
-    private void setImagePhoto(ImageView imageView) {
+    private void setImagePhoto(QuickContactBadge badge) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 
             InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(
                     getActivity().getContentResolver(), Uri.parse(mContact.getPhoto()));
             if (input != null) {
-                imageView.setImageBitmap(BitmapFactory.decodeStream(input));
+                badge.setImageBitmap(BitmapFactory.decodeStream(input));
             }
 
         } else
-            imageView.setImageURI(Uri.parse(mContact.getPhoto()));
+            badge.setImageURI(Uri.parse(mContact.getPhoto()));
     }
-
 
     private void initAdapter() {
         List<Message> list = new ArrayList<Message>();

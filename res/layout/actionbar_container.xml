@@ -13,7 +13,7 @@
             android:visibility="gone"
             />
 
-    <ImageView
+    <QuickContactBadge
             android:id="@+id/imageView_actionbar"
             android:layout_height="48dp"
             android:layout_width="48dp"
