@@ -3,6 +3,8 @@ package fr.castorflex.android.quickanswer.providers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import com.google.gson.Gson;
@@ -106,5 +108,21 @@ public class SettingsProvider {
     public static Uri getRingtoneUri(Context context) {
         SharedPreferences prefs = getSharedPreferences(context);
         return Uri.parse(prefs.getString(context.getString(R.string.pref_key_notif_ringtone), ""));
+    }
+
+    public static String getRingtoneName(Context context) {
+        Uri uri = getRingtoneUri(context);
+        return getRingtoneName(context, uri);
+    }
+
+    public static String getRingtoneName(Context context, String str) {
+        return getRingtoneName(context, Uri.parse(str));
+    }
+
+    public static String getRingtoneName(Context context, Uri uri) {
+        Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+        if (uri.toString().length() > 0)
+            return ringtone.getTitle(context);
+        return context.getString(R.string.silent);
     }
 }

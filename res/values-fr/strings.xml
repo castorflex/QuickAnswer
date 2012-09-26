@@ -13,6 +13,8 @@
     <string name="unknown">Inconnu</string>
     <string name="message_sending">Envoi&#8230;</string>
     <string name="message_sent">Message envoyé !</string>
+    <string name="silent">Aucune</string>
+
 
 
     <string name="menu_refresh">Rafraichir</string>
