@@ -19,12 +19,12 @@
                  android:layout_alignParentRight="true"/>
 
 
-    <LinearLayout android:id="@+id/linearLayout_left"
-                  android:layout_width="wrap_content"
-                  android:layout_height="match_parent"
-                  android:layout_alignParentLeft="true"
-                  android:layout_toLeftOf="@id/imageView_sms_app"
-                  android:orientation="horizontal" android:background="@android:color/transparent">
+    <RelativeLayout android:id="@+id/linearLayout_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/imageView_sms_app"
+                    android:orientation="horizontal" android:background="@android:color/transparent">
 
         <ImageButton android:id="@+id/imageView_overflow"
                      android:paddingTop="4dp"
@@ -35,13 +35,22 @@
                      android:layout_height="match_parent"
                      android:background="@drawable/bg_selector"
                      android:src="@drawable/ic_overflow"
-                     android:layout_gravity="center_vertical"/>
+                     android:layout_centerVertical="true"/>
 
-        <View android:layout_width="1dp"
-              android:layout_height="match_parent"
-              android:layout_marginTop="12dp"
-              android:layout_marginBottom="12dp"
-              android:background="@drawable/divider"/>
+        <View android:layout_width="8dp"
+              android:layout_height="8dp"
+              android:background="@drawable/triangle"
+              android:layout_alignRight="@id/imageView_overflow"
+              android:layout_alignParentBottom="true"/>
+
+        <View
+                android:id="@+id/view_divider1"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/divider"
+                android:layout_toRightOf="@id/imageView_overflow"/>
 
         <ImageButton android:id="@+id/imageView_settings"
                      android:paddingTop="4dp"
@@ -52,14 +61,18 @@
                      android:layout_height="match_parent"
                      android:background="@drawable/bg_selector"
                      android:src="@drawable/ic_settings"
-                     android:layout_gravity="center_vertical"/>
+                     android:layout_centerVertical="true"
+                     android:layout_toRightOf="@id/view_divider1"/>
 
 
-        <View android:layout_width="1dp"
-              android:layout_height="match_parent"
-              android:layout_marginTop="12dp"
-              android:layout_marginBottom="12dp"
-              android:background="@drawable/divider"/>
+        <View
+                android:id="@+id/view_divider2"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/divider"
+                android:layout_toRightOf="@id/imageView_settings"/>
 
         <ImageButton android:id="@+id/imageView_call"
                      android:paddingTop="4dp"
@@ -70,9 +83,10 @@
                      android:layout_height="match_parent"
                      android:background="@drawable/bg_selector"
                      android:src="@drawable/ic_call"
-                     android:layout_gravity="center_vertical"/>
+                     android:layout_centerVertical="true"
+                     android:layout_toRightOf="@id/view_divider2"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

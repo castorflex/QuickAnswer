@@ -104,6 +104,7 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
             Intent intent = new Intent(SettingsActivity.this, QuickAnswersActivity.class);
             SettingsActivity.this.startActivity(intent);
             return true;
+
         }
     }
 
