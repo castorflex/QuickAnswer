@@ -121,7 +121,7 @@ public class SettingsProvider {
 
     public static String getRingtoneName(Context context, Uri uri) {
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-        if (uri.toString().length() > 0)
+        if (!(ringtone == null) && uri.toString().length() > 0)
             return ringtone.getTitle(context);
         return context.getString(R.string.silent);
     }

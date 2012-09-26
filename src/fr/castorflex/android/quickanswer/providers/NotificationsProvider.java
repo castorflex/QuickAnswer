@@ -94,8 +94,11 @@ public class NotificationsProvider {
                 }
             }
             if (SettingsProvider.isRingtoneEnabled(context)) {
-                Ringtone r = RingtoneManager.getRingtone(context, SettingsProvider.getRingtoneUri(context));
-                r.play();
+                try {
+                    Ringtone r = RingtoneManager.getRingtone(context, SettingsProvider.getRingtoneUri(context));
+                    r.play();
+                } catch (Exception e) {
+                }
             }
         }
 

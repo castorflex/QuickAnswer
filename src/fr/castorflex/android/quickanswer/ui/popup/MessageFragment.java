@@ -150,22 +150,15 @@ public class MessageFragment extends Fragment {
 
     private void initViews() {
         mContact = ContactProvider.getInstance().getContact(mIdSender, getActivity());
-        if (mContact != null) {
-            if (mContact.getPhoto() != null && mContact.getPhoto().length() > 0) {
-                QuickContactBadge badge = (QuickContactBadge) mActionbar.findViewById(R.id.imageView_actionbar);
-                badge.assignContactFromPhone(mContact.getNumber(), false);
+        QuickContactBadge badge = (QuickContactBadge) mActionbar.findViewById(R.id.imageView_actionbar);
+        if (mContact == null)
+            mContact = new Contact(getString(R.string.unknown), mIdSender, null);
 
-                setImagePhoto(badge);
-                if (badge.getDrawable() == null)
-                    badge.setImageToDefault();
-            } else
-                mActionbar.findViewById(R.id.imageView_actionbar).setVisibility(View.GONE);
-            ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
-            ((TextView) mActionbar.findViewById(R.id.textView_actionbar_small)).setText(mIdSender);
-        } else {
-            ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mIdSender);
-            mActionbar.findViewById(R.id.textView_actionbar_small).setVisibility(View.GONE);
-        }
+        badge.assignContactFromPhone(mContact.getNumber(), false);
+        setImagePhoto(badge);
+
+        ((TextView) mActionbar.findViewById(R.id.textView_actionbar_big)).setText(mContact.getName());
+        ((TextView) mActionbar.findViewById(R.id.textView_actionbar_small)).setText(mIdSender);
 
 
     }
@@ -173,14 +166,22 @@ public class MessageFragment extends Fragment {
     private void setImagePhoto(QuickContactBadge badge) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 
-            InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(
-                    getActivity().getContentResolver(), Uri.parse(mContact.getPhoto()));
-            if (input != null) {
-                badge.setImageBitmap(BitmapFactory.decodeStream(input));
+            if (mContact.getPhoto() != null) {
+                InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(
+                        getActivity().getContentResolver(), Uri.parse(mContact.getPhoto()));
+                if (input != null) {
+                    badge.setImageBitmap(BitmapFactory.decodeStream(input));
+                }
             }
+            if (badge.getDrawable() == null)
+                badge.setVisibility(View.GONE);
 
-        } else
-            badge.setImageURI(Uri.parse(mContact.getPhoto()));
+        } else {
+            if (mContact.getPhoto() != null)
+                badge.setImageURI(Uri.parse(mContact.getPhoto()));
+            if (badge.getDrawable() == null)
+                badge.setImageToDefault();
+        }
     }
 
     private void initAdapter() {

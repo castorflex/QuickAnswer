@@ -37,8 +37,8 @@
                      android:src="@drawable/ic_overflow"
                      android:layout_centerVertical="true"/>
 
-        <View android:layout_width="8dp"
-              android:layout_height="8dp"
+        <View android:layout_width="12dp"
+              android:layout_height="12dp"
               android:background="@drawable/triangle"
               android:layout_alignRight="@id/imageView_overflow"
               android:layout_alignParentBottom="true"/>
