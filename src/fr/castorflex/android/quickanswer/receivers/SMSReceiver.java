@@ -13,9 +13,11 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.JSONProvider;
 import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.popup.PopupActivity;
+import fr.castorflex.android.quickanswer.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,6 @@ public class SMSReceiver extends BroadcastReceiver {
     public static final String SMS_RECEIVER = SMS_PACKAGE + ".transaction.SmsReceiver";
 
     private PhoneStateListener mListener;
-    private ArrayList<Message> mMessageList;
     private Context mContext;
     private Intent mIntent;
 
@@ -70,16 +71,23 @@ public class SMSReceiver extends BroadcastReceiver {
             notifySmsSentAction(context, intent);
         }
 
-        if (SettingsProvider.isAppEnabled(context)) {
-            if (action.equals(SMS_RECEIVED)) {
-                TelephonyManager mgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        else if (action.equals(Intent.ACTION_USER_PRESENT)) {
+            notifyPopup(context);
+        }
 
-                addSMSToStack(intent.getExtras());
+        else if (SettingsProvider.isAppEnabled(context)) {
+            if (action.equals(SMS_RECEIVED)) {
+                addSMSToStack(context, intent.getExtras());
+
+                TelephonyManager mgr = (TelephonyManager)
+                        context.getSystemService(Context.TELEPHONY_SERVICE);
+
                 if (mgr.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+                    NotificationsProvider.getInstance().notifySmsReceived(context);
                     notifyPopup(context);
                 } else {
                     if (mListener == null) {
-                        initListener(mgr);
+                        initListener(mgr, context);
                     }
                 }
             }
@@ -106,34 +114,41 @@ public class SMSReceiver extends BroadcastReceiver {
     }
 
     private void notifyPopup(Context context) {
-        NotificationsProvider.getInstance().notifySmsReceived(context);
 
-        Intent i = new Intent(context, PopupActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putParcelableArrayListExtra("listpdus", mMessageList);
-        context.startActivity(i);
-        mMessageList.clear();
+        if (!Utils.isLocked(context)) {
+            NotificationsProvider.getInstance().clearReceived(context);
+
+            ArrayList<Message> messageArrayList = JSONProvider.getStoredMessages(context);
+            if (messageArrayList != null && messageArrayList.size() > 0) {
+                Intent i = new Intent(context, PopupActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putParcelableArrayListExtra("listpdus", messageArrayList);
+                context.startActivity(i);
+                JSONProvider.clearMessagesList(context);
+            }
+        }
     }
 
-    private void addSMSToStack(Bundle extras) {
+    private void addSMSToStack(Context context, Bundle extras) {
         Object[] pdus = (Object[]) extras.get("pdus");
         SmsMessage[] messages = new SmsMessage[pdus.length];
         for (int i = 0; i < pdus.length; ++i) {
             byte[] byteData = (byte[]) pdus[i];
             messages[i] = SmsMessage.createFromPdu(byteData);
         }
-        if (mMessageList == null)
-            mMessageList = new ArrayList<Message>();
-        mMessageList.add(new Message(messages[0].getDisplayOriginatingAddress(), messages));
+        JSONProvider.storeMessage(context,
+                new Message(messages[0].getDisplayOriginatingAddress(), messages));
     }
 
-    private void initListener(TelephonyManager mgr) {
+    private void initListener(TelephonyManager mgr, final Context context) {
         mListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE:
-                        if (mMessageList != null && mMessageList.size() > 0) {
+                        ArrayList<Message> list = JSONProvider.getStoredMessages(context);
+                        if (list != null && list.size() > 0) {
+                            NotificationsProvider.getInstance().notifySmsReceived(context);
                             notifyPopup(mContext);
                         }
                         break;

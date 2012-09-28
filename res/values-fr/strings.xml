@@ -12,7 +12,10 @@
     <string name="loading">Chargement&#8230;</string>
     <string name="unknown">Inconnu</string>
     <string name="message_sending">Envoi&#8230;</string>
-    <string name="message_sent">Message envoyé !</string>
+    <string name="message_sent">Message envoyé</string>
+    <string name="message_received">Message reçu</string>
+    <string name="new_message_1">1 nouveau message</string>
+    <string name="new_message_x">%1$d nouveaux messages</string>
     <string name="silent">Aucune</string>
 
 

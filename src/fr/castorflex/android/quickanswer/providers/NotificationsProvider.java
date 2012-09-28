@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
 import fr.castorflex.android.quickanswer.R;
+import fr.castorflex.android.quickanswer.pojos.Message;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +22,11 @@ import fr.castorflex.android.quickanswer.R;
  * To change this template use File | Settings | File Templates.
  */
 public class NotificationsProvider {
+
+    private static int NOTIF_RECEIVED = 1;
+    private static int NOTIF_SENT = 2;
+    private static int NOTIF_SENDING = 3;
+
 
     private static NotificationsProvider instance = null;
 
@@ -46,13 +54,13 @@ public class NotificationsProvider {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
         notification.setLatestEventInfo(context, "", "", null);
-        nm.notify(2, notification);
+        nm.notify(NOTIF_SENT, notification);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                nm.cancel(2);
+                nm.cancel(NOTIF_SENT);
             }
         }, 1000);
     }
@@ -67,13 +75,13 @@ public class NotificationsProvider {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
         notification.setLatestEventInfo(context, "", "", null);
-        nm.notify(1, notification);
+        nm.notify(NOTIF_SENDING, notification);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                nm.cancel(1);
+                nm.cancel(NOTIF_SENDING);
             }
         }, 1000);
     }
@@ -85,6 +93,28 @@ public class NotificationsProvider {
 
     public void notifySmsReceived(Context context) {
         if (SettingsProvider.isNotifEnabled(context)) {
+            //statusbar
+            List<Message> list = JSONProvider.getStoredMessages(context);
+            int nb = list == null ? 0 : list.size();
+
+            if(nb == 0)
+                return;
+
+            String contentStr = nb == 1 ? context.getString(R.string.new_message_1) :
+                    String.format(context.getString(R.string.new_message_x), nb);
+
+            final NotificationManager nm = getNotificationManager(context);
+
+            final Notification notification = new Notification(
+                    R.drawable.ic_notif,
+                    context.getString(R.string.message_received),
+                    System.currentTimeMillis());
+
+            notification.setLatestEventInfo(context, context.getString(
+                    R.string.message_received), contentStr, null);
+            nm.notify(NOTIF_RECEIVED, notification);
+
+            //vibrate
             if (SettingsProvider.isVibrateEnabled(context)) {
                 if (!(((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode()
                         == AudioManager.RINGER_MODE_SILENT)) {
@@ -93,6 +123,8 @@ public class NotificationsProvider {
                     v.vibrate(pattern, -1);
                 }
             }
+
+            //ringtone
             if (SettingsProvider.isRingtoneEnabled(context)) {
                 try {
                     Ringtone r = RingtoneManager.getRingtone(context, SettingsProvider.getRingtoneUri(context));
@@ -101,6 +133,11 @@ public class NotificationsProvider {
                 }
             }
         }
+    }
 
+    public void clearReceived(Context context) {
+        final NotificationManager nm = getNotificationManager(context);
+
+        nm.cancel(NOTIF_RECEIVED);
     }
 }
