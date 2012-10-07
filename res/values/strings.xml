@@ -23,6 +23,7 @@
     <string name="new_message_1">1 new message</string>
     <string name="new_message_x">%1$d new messages</string>
     <string name="silent">Silent</string>
+    <string name="sending_failed">Sending failed</string>
 
 
     <string name="menu_refresh">Refresh</string>

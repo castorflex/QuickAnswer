@@ -11,6 +11,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
+import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.providers.MessageProvider;
 import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
@@ -123,6 +125,7 @@ public class SMSReceiver extends BroadcastReceiver {
             default:
                 msg.what = MESSAGE_FAILED;
                 smsSentHandler.sendMessage(msg);
+                Toast.makeText(mContext, R.string.sending_failed, Toast.LENGTH_LONG).show();
         }
     }
 

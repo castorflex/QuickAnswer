@@ -18,13 +18,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import fr.castorflex.android.quickanswer.R;
-import fr.castorflex.android.quickanswer.ui.settings.SettingsActivity;
 import fr.castorflex.android.quickanswer.libs.CustomViewPager;
 import fr.castorflex.android.quickanswer.libs.FixedSpeedScroller;
 import fr.castorflex.android.quickanswer.libs.OverflowLayout;
 import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
+import fr.castorflex.android.quickanswer.ui.settings.SettingsActivity;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
 import java.lang.reflect.Field;
@@ -104,6 +104,19 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         mCallButton.setOnClickListener(this);
 
         mOverflowMenu.setOnItemSelectedListener(this);
+        mOverflowMenu.setOnCloseListener(new OverflowLayout.OnCloseListener() {
+            @Override
+            public void onClose() {
+                findViewById(android.R.id.content).invalidate();
+            }
+        });
+
+        mOverflowMenu.setOnOpenListener(new OverflowLayout.OnOpenListener() {
+            @Override
+            public void onOpen() {
+                findViewById(android.R.id.content).invalidate();
+            }
+        });
 
         mSmsAppButton.setOnClickListener(this);
 
@@ -191,7 +204,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
         } else if (view == mSettingsButton) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivityForResult(intent, 0);
-        } else if(view == mCallButton){
+        } else if (view == mCallButton) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + mPagerAdapter.getCurrentSender()));
             startActivity(callIntent);

@@ -12,7 +12,6 @@ import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -39,8 +38,16 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
     private QuickAnswersAdapter mAdapter;
 
     private OnItemSelectedListener mListener;
+    private OnCloseListener mCloseListener;
+    private OnOpenListener mOpenListener;
 
+    public static interface OnCloseListener {
+        public void onClose();
+    }
 
+    public static interface OnOpenListener {
+        public void onOpen();
+    }
 
 
     public interface OnItemSelectedListener {
@@ -64,10 +71,10 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
     }
 
     public boolean onBackPressed() {
-        if(mIsOpened){
+        if (mIsOpened) {
             close();
             return true;
-        }else
+        } else
             return false;
     }
 
@@ -134,6 +141,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
             this.startAnimation(mAnimationClose);
             setVisibility(View.GONE);
             mIsOpened = false;
+            if(mCloseListener != null) mCloseListener.onClose();
         }
     }
 
@@ -142,6 +150,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
             setVisibility(View.VISIBLE);
             this.startAnimation(mAnimationOpen);
             mIsOpened = true;
+            if(mOpenListener != null) mOpenListener.onOpen();
         }
     }
 
@@ -151,8 +160,16 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
         notifyClick(qa, TYPE_EDIT);
     }
 
-    public void updateAdapter(){
+    public void updateAdapter() {
         mAdapter.updateItems();
+    }
+
+    public void setOnOpenListener(OnOpenListener listener) {
+        this.mOpenListener = listener;
+    }
+
+    public void setOnCloseListener(OnCloseListener listener) {
+        this.mCloseListener = listener;
     }
 
     class QuickAnswersAdapter extends BaseAdapter {
@@ -165,7 +182,7 @@ public class OverflowLayout extends LinearLayout implements AdapterView.OnItemCl
             mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void updateItems(){
+        public void updateItems() {
             mData = SettingsProvider.getQuickAnswers(mContext);
             notifyDataSetChanged();
         }
