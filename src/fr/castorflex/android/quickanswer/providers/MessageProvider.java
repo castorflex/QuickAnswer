@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Time: 15:04
  * To change this template use File | Settings | File Templates.
  */
-public class JSONProvider {
+public class MessageProvider {
 
     private static final String KEY_MESSAGES = "messages";
 

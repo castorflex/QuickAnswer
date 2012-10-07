@@ -94,7 +94,7 @@ public class NotificationsProvider {
     public void notifySmsReceived(Context context) {
         if (SettingsProvider.isNotifEnabled(context)) {
             //statusbar
-            List<Message> list = JSONProvider.getStoredMessages(context);
+            List<Message> list = MessageProvider.getStoredMessages(context);
             int nb = list == null ? 0 : list.size();
 
             if(nb == 0)

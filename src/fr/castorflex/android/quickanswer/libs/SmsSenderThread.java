@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class SmsSenderThread extends Thread {
 
 
-
     public SmsSenderThread(final Context c, final Message msg) {
         super(new Runnable() {
             @Override
@@ -35,10 +34,10 @@ public class SmsSenderThread extends Thread {
                     ArrayList<String> mess = smsManager.divideMessage(msg.getMessage());
                     ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
                     for (String msg : mess) {
-                        sentIntents.add(PendingIntent.getBroadcast(c, 0,
-                                new Intent(SMSReceiver.SMS_SENT, uri).
-                                        setClass(c, SMSReceiver.class),
-                                0));
+                        Intent intent = new Intent(SMSReceiver.SMS_SENT, uri);
+                        intent.putExtra(SMSReceiver.EXTRA_URI, uri.toString());
+                        intent.setClass(c, SMSReceiver.class);
+                        sentIntents.add(PendingIntent.getBroadcast(c, 0, intent, 0));
                     }
                     NotificationsProvider.getInstance().notifySending(c);
                     smsManager.sendMultipartTextMessage(msg.getSender(), null, mess, sentIntents, null);
@@ -56,6 +55,7 @@ public class SmsSenderThread extends Thread {
         cv.put("address", msg.getSender());
         cv.put("body", msg.getMessage());
         cv.put("date", msg.getDate().getTime());
+        cv.put(SMSReceiver.TYPE, SMSReceiver.MESSAGE_TYPE_OUTBOX);
 
         ContentResolver resolver = context.getContentResolver();
         return resolver.insert(uri, cv);

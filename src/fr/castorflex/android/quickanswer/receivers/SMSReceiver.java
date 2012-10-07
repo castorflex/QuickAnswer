@@ -2,10 +2,9 @@ package fr.castorflex.android.quickanswer.receivers;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
@@ -13,7 +12,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import fr.castorflex.android.quickanswer.pojos.Message;
-import fr.castorflex.android.quickanswer.providers.JSONProvider;
+import fr.castorflex.android.quickanswer.providers.MessageProvider;
 import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.ui.popup.PopupActivity;
@@ -31,6 +30,8 @@ import java.util.List;
  */
 public class SMSReceiver extends BroadcastReceiver {
 
+    public final static String EXTRA_URI = "extra_uri";
+
     private final static int MESSAGE_OK = 0;
     private final static int MESSAGE_FAILED = 1;
 
@@ -39,6 +40,22 @@ public class SMSReceiver extends BroadcastReceiver {
 
     public static final String SMS_PACKAGE = "com.android.mms";
     public static final String SMS_RECEIVER = SMS_PACKAGE + ".transaction.SmsReceiver";
+    public static final String SMS_SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME =
+            "com.android.mms.ui.ConversationComposer";
+
+    /**
+     * The type of the message
+     * <P>Type: INTEGER</P>
+     */
+    public static final String TYPE = "type";
+
+    public static final int MESSAGE_TYPE_ALL = 0;
+    public static final int MESSAGE_TYPE_INBOX = 1;
+    public static final int MESSAGE_TYPE_SENT = 2;
+    public static final int MESSAGE_TYPE_DRAFT = 3;
+    public static final int MESSAGE_TYPE_OUTBOX = 4;
+    public static final int MESSAGE_TYPE_FAILED = 5; // for failed outgoing messages
+    public static final int MESSAGE_TYPE_QUEUED = 6; // for messages to send later
 
     private PhoneStateListener mListener;
     private Context mContext;
@@ -69,13 +86,9 @@ public class SMSReceiver extends BroadcastReceiver {
 
         if (action.equals(SMS_SENT)) {
             notifySmsSentAction(context, intent);
-        }
-
-        else if (action.equals(Intent.ACTION_USER_PRESENT)) {
+        } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
             notifyPopup(context);
-        }
-
-        else if (SettingsProvider.isAppEnabled(context)) {
+        } else if (SettingsProvider.isAppEnabled(context)) {
             if (action.equals(SMS_RECEIVED)) {
                 addSMSToStack(context, intent.getExtras());
 
@@ -118,13 +131,13 @@ public class SMSReceiver extends BroadcastReceiver {
         if (!Utils.isLocked(context)) {
             NotificationsProvider.getInstance().clearReceived(context);
 
-            ArrayList<Message> messageArrayList = JSONProvider.getStoredMessages(context);
+            ArrayList<Message> messageArrayList = MessageProvider.getStoredMessages(context);
             if (messageArrayList != null && messageArrayList.size() > 0) {
                 Intent i = new Intent(context, PopupActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putParcelableArrayListExtra("listpdus", messageArrayList);
                 context.startActivity(i);
-                JSONProvider.clearMessagesList(context);
+                MessageProvider.clearMessagesList(context);
             }
         }
     }
@@ -136,7 +149,7 @@ public class SMSReceiver extends BroadcastReceiver {
             byte[] byteData = (byte[]) pdus[i];
             messages[i] = SmsMessage.createFromPdu(byteData);
         }
-        JSONProvider.storeMessage(context,
+        MessageProvider.storeMessage(context,
                 new Message(messages[0].getDisplayOriginatingAddress(), messages));
     }
 
@@ -146,7 +159,7 @@ public class SMSReceiver extends BroadcastReceiver {
             public void onCallStateChanged(int state, String incomingNumber) {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE:
-                        ArrayList<Message> list = JSONProvider.getStoredMessages(context);
+                        ArrayList<Message> list = MessageProvider.getStoredMessages(context);
                         if (list != null && list.size() > 0) {
                             NotificationsProvider.getInstance().notifySmsReceived(context);
                             notifyPopup(mContext);
@@ -162,16 +175,53 @@ public class SMSReceiver extends BroadcastReceiver {
     }
 
     private void notifySmsSent(boolean success) {
+        boolean noAppFound = false;
         Intent intent = mIntent.setClassName(
                 SMS_PACKAGE,
                 SMS_RECEIVER);
 
+        Uri uri = Uri.parse(intent.getStringExtra(EXTRA_URI));
+
+
         List<ResolveInfo> ri = mContext.getPackageManager().queryBroadcastReceivers(intent, 0);
-        try {
-            PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);
-            pi.send(mResultCode);
-        } catch (PendingIntent.CanceledException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        if (ri.size() > 0) {
+            ////////////////////////////////////////////////////////////////
+            // Thanks to Adam K for this "hack"
+            // Only the samsung sms/mms apk has this modified compose class
+            final Intent samsungIntent = new Intent();
+            samsungIntent.setClassName(
+                    SMS_PACKAGE,
+                    SMS_SAMSUNG_MESSAGING_COMPOSE_CLASS_NAME);
+            ri = mContext.getPackageManager().queryIntentActivities(samsungIntent, 0);
+            if (ri.size() > 0) {
+                // no stock system app found to finish the message move
+                noAppFound = true;
+            }
+            ////////////////////////////////////////////////////////////////
+        } else {
+            noAppFound = true;
+        }
+
+        if (noAppFound) {
+            ContentValues cv = new ContentValues(7);
+
+            if (!success) {
+                cv.put(TYPE, MESSAGE_TYPE_FAILED);
+                cv.put("read", 0);
+            } else {
+                cv.put(TYPE, SMSReceiver.MESSAGE_TYPE_SENT);
+                cv.put("read", 1);
+            }
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.update(uri, cv, null, null);
+
+        } else {
+            try {
+                PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, intent, 0);
+                pi.send(mResultCode);
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
