@@ -24,6 +24,7 @@ import fr.castorflex.android.quickanswer.libs.OverflowLayout;
 import fr.castorflex.android.quickanswer.libs.SmsSenderThread;
 import fr.castorflex.android.quickanswer.pojos.Message;
 import fr.castorflex.android.quickanswer.pojos.QuickAnswer;
+import fr.castorflex.android.quickanswer.providers.ContactProvider;
 import fr.castorflex.android.quickanswer.ui.settings.SettingsActivity;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
@@ -138,6 +139,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
         List<Message> messages = b.getParcelableArrayList("listpdus");
         for (Message msg : messages) {
+            msg.setContact(ContactProvider.getInstance().getContact(msg.getSender(), this));
             mPagerAdapter.addSmsMessage(msg);
         }
     }

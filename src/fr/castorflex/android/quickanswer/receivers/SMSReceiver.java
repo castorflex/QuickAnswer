@@ -189,7 +189,7 @@ public class SMSReceiver extends BroadcastReceiver {
         List<ResolveInfo> ri = mContext.getPackageManager().queryBroadcastReceivers(intent, 0);
         if (ri.size() > 0) {
             ////////////////////////////////////////////////////////////////
-            // Thanks to Adam K for this "hack"
+            // Thanks Adam K for this "hack"
             // Only the samsung sms/mms apk has this modified compose class
             final Intent samsungIntent = new Intent();
             samsungIntent.setClassName(

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
+import android.os.Handler;
 import fr.castorflex.android.quickanswer.pojos.Message;
 
 import java.util.List;
@@ -21,13 +22,14 @@ public class SmsProvider {
     public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
 
     public static void setSmsAsRead(final Context context, final List<Message> messages) {
-        new Thread(new Runnable() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 for (Message msg : messages) {
                     setSmsAsRead(context, msg);
                 }            }
-        }).start();
+        }, 1000);
 
     }
 

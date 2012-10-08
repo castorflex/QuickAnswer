@@ -3,6 +3,7 @@ package fr.castorflex.android.quickanswer.pojos;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.telephony.SmsMessage;
+import fr.castorflex.android.quickanswer.providers.ContactProvider;
 import fr.castorflex.android.quickanswer.providers.SmsProvider;
 
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 public class Message implements Parcelable {
 
+    private Contact contact;
     private String sender;
     private String message;
     private Date date;
@@ -48,6 +50,16 @@ public class Message implements Parcelable {
 
     public Date getDate() {
         return date;
+    }
+
+    public Contact getContact(){
+        return contact;
+    }
+
+    public void setContact(Contact contact){
+        this.contact = contact;
+        if(this.contact != null)
+            sender = contact.getNumber();
     }
 
     //PARCELABLE
