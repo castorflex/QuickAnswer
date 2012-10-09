@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class SmsProvider {
 
-    public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
+    public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms/");
 
     public static void setSmsAsRead(final Context context, final List<Message> messages) {
         Handler handler = new Handler();
@@ -27,21 +27,25 @@ public class SmsProvider {
             @Override
             public void run() {
                 for (Message msg : messages) {
-                    setSmsAsRead(context, msg);
-                }            }
+                    if (msg.getType() == Message.TYPE_SMS)
+                        setSmsAsRead(context, msg);
+                }
+            }
         }, 1000);
 
     }
 
     public static void setSmsAsRead(Context context, Message message) {
 
-        long id = findSmsId(context, message);
+        if (message.getType() == Message.TYPE_SMS) {
 
-        ContentValues values = new ContentValues();
-        values.put("read", true);
-        context.getContentResolver()
-                .update(Uri.parse("content://sms/"), values, "_id=" + id, null);
+            long id = findSmsId(context, message);
 
+            ContentValues values = new ContentValues();
+            values.put("read", true);
+            context.getContentResolver()
+                    .update(SMS_CONTENT_URI, values, "_id=" + id, null);
+        }
     }
 
     public static long findSmsId(Context context, Message message) {
@@ -50,14 +54,14 @@ public class SmsProvider {
         String selection = "body=" + DatabaseUtils.sqlEscapeString(message.getMessage())
                 + " and read=0";
         String[] projection = new String[]{"_id", "date", "thread_id", "body"};
-        String sortOrder = "date DESC";
+        String order = "date DESC";
 
         Cursor cursor = context.getContentResolver().query(
                 Uri.withAppendedPath(SMS_CONTENT_URI, "inbox"),
                 projection,
                 selection,
                 null,
-                sortOrder);
+                order);
 
         try {
             if (cursor != null && cursor.moveToFirst()) {

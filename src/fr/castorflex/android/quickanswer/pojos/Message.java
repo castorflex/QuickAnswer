@@ -17,7 +17,10 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class Message implements Parcelable {
+    public static final int TYPE_SMS=0;
+    public static final int TYPE_MMS=1;
 
+    private int type;
     private Contact contact;
     private String sender;
     private String message;
@@ -33,11 +36,24 @@ public class Message implements Parcelable {
         date = Calendar.getInstance().getTime();
     }
 
-    public Message(String sender, String message) {
+    public Message(String sender, String message, int type) {
         this.sender = sender;
         this.message = message;
+        this.type = type;
 
         date = Calendar.getInstance().getTime();
+    }
+
+    public Message(String sender, String message) {
+        this(sender, message, TYPE_SMS);
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getSender() {
@@ -73,6 +89,7 @@ public class Message implements Parcelable {
         parcel.writeValue(sender);
         parcel.writeValue(message);
         parcel.writeValue(date);
+        parcel.writeInt(type);
     }
 
     public static final Parcelable.Creator<Message> CREATOR = new Parcelable.Creator<Message>() {
@@ -91,5 +108,6 @@ public class Message implements Parcelable {
         sender = (String) parcel.readValue(cl);
         message = (String) parcel.readValue(cl);
         date = (Date) parcel.readValue(cl);
+        type = parcel.readInt();
     }
 }

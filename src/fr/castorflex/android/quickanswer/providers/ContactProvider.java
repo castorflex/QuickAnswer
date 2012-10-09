@@ -35,8 +35,9 @@ public abstract class ContactProvider {
         return instance;
     }
 
+    public abstract Contact getContactById(final long id, Context context);
 
-    public abstract Contact getContact(final String phoneNumber, Context context);
+    public abstract Contact getContactByPhoneNumber(final String phoneNumber, Context context);
 
     public static class ContactProviderV7 extends ContactProvider {
 
@@ -44,7 +45,35 @@ public abstract class ContactProvider {
         }
 
         @Override
-        public Contact getContact(String phoneNumber, Context context) {
+        public Contact getContactById(final long id, Context context) {
+            ContentResolver resolver = context.getContentResolver();
+
+            Uri uri = ContactsContract.Contacts.getLookupUri(id, ContactsContract.Contacts._ID);
+            Cursor c = resolver.query(uri, new String[]{
+                    ContactsContract.PhoneLookup.DISPLAY_NAME,
+                    ContactsContract.PhoneLookup.NUMBER,
+                    ContactsContract.PhoneLookup._ID}, null, null, null);
+
+            Contact contact = null;
+            if (c != null && c.getCount() > 0) {
+                if (c.moveToFirst()) {
+                    Uri photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
+                            c.getLong(2));
+                    contact = new Contact(c.getString(0), c.getString(1), photoUri.toString());
+                } else {
+                    contact = null;
+                }
+            } else {
+                contact = null;
+            }
+            c.close();
+            c = null;
+
+            return contact;
+        }
+
+        @Override
+        public Contact getContactByPhoneNumber(String phoneNumber, Context context) {
             ContentResolver resolver = context.getContentResolver();
 
             Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
@@ -77,8 +106,30 @@ public abstract class ContactProvider {
         private ContactProviderV11() {
         }
 
+
         @Override
-        public Contact getContact(String phoneNumber, Context context) {
+        public Contact getContactById(long id, Context context) {
+            ContentResolver resolver = context.getContentResolver();
+
+            Uri uri = ContactsContract.Contacts.getLookupUri(id, ContactsContract.Contacts._ID);
+            Cursor c = resolver.query(uri, new String[]{
+                    ContactsContract.PhoneLookup.DISPLAY_NAME,
+                    ContactsContract.PhoneLookup.NUMBER,
+                    ContactsContract.PhoneLookup._ID}, null, null, null);
+
+            Contact contact = null;
+            if (c != null && c.moveToFirst()) {
+                contact = new Contact(c.getString(0), c.getString(1), c.getString(2));
+            } else {
+                contact = null;
+            }
+            c.close();
+            c = null;
+            return contact;
+        }
+
+        @Override
+        public Contact getContactByPhoneNumber(String phoneNumber, Context context) {
             ContentResolver resolver = context.getContentResolver();
 
             Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
@@ -88,7 +139,7 @@ public abstract class ContactProvider {
                     ContactsContract.PhoneLookup.PHOTO_THUMBNAIL_URI}, null, null, null);
 
             Contact contact = null;
-            if (c.moveToFirst()) {
+            if (c != null && c.moveToFirst()) {
                 contact = new Contact(c.getString(0), c.getString(1), c.getString(2));
             } else {
                 contact = new Contact(context.getString(R.string.unknown), phoneNumber, null);

@@ -14,6 +14,7 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Message;
+import fr.castorflex.android.quickanswer.providers.MMSProvider;
 import fr.castorflex.android.quickanswer.providers.MessageProvider;
 import fr.castorflex.android.quickanswer.providers.NotificationsProvider;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
@@ -39,6 +40,8 @@ public class SMSReceiver extends BroadcastReceiver {
 
     public final static String SMS_SENT = "com.android.mms.transaction.MESSAGE_SENT";
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String MMS_RECEIVED = "android.provider.Telephony.WAP_PUSH_RECEIVED";
+
 
     public static final String SMS_PACKAGE = "com.android.mms";
     public static final String SMS_RECEIVER = SMS_PACKAGE + ".transaction.SmsReceiver";
@@ -91,8 +94,11 @@ public class SMSReceiver extends BroadcastReceiver {
         } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
             notifyPopup(context);
         } else if (SettingsProvider.isAppEnabled(context)) {
-            if (action.equals(SMS_RECEIVED)) {
-                addSMSToStack(context, intent.getExtras());
+            if (action.equals(SMS_RECEIVED) || action.equals(MMS_RECEIVED)) {
+                if (action.equals(MMS_RECEIVED))
+                    addMMSToStack();
+                else
+                    addSMSToStack(context, intent.getExtras());
 
                 TelephonyManager mgr = (TelephonyManager)
                         context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -142,6 +148,21 @@ public class SMSReceiver extends BroadcastReceiver {
                 context.startActivity(i);
                 MessageProvider.clearMessagesList(context);
             }
+        }
+    }
+
+    private void addMMSToStack() {
+        Thread.currentThread();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        Message message = MMSProvider.getLastMMS(mContext);
+        if (message != null) {
+            message.setType(Message.TYPE_MMS);
+            MessageProvider.storeMessage(mContext, message);
         }
     }
 

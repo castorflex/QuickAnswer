@@ -67,7 +67,12 @@ public class MessagesAdapter extends BaseAdapter {
         }
 
         Message item = getItem(position);
-        holder.message.setText(item.getMessage());
+
+        if (item.getType() == Message.TYPE_MMS)
+            holder.message.setText("MMS");
+        else
+            holder.message.setText(item.getMessage());
+
         Linkify.addLinks(holder.message, Linkify.ALL);
         holder.date.setText(mDateFormat.format(item.getDate()));
 

@@ -31,9 +31,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:singleLine="false"
                     android:maxLines="3"
-                    android:inputType="textShortMessage"
-                    android:hint="@string/edittext_hint"/>
+                    android:inputType="textShortMessage|textMultiLine"
+                    android:hint="@string/edittext_hint"
+                    android:gravity="top"/>
 
             <ImageView
                     android:id="@+id/imageButton_send"

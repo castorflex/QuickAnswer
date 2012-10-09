@@ -59,15 +59,16 @@ public class MyFragmentPagerAdapter extends FragmentStatePagerAdapter implements
 
         notifyDataSetChanged();
 
-        if (mSenders.get(mCurrentPosition).equals(msg.getSender())) {
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    SmsProvider.setSmsAsRead(mActivity, msg);
-                }
-            }, 1000);
-        }
+        if (msg.getType() == Message.TYPE_SMS)
+            if (mSenders.get(mCurrentPosition).equals(msg.getSender())) {
+                Handler h = new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        SmsProvider.setSmsAsRead(mActivity, msg);
+                    }
+                }, 1000);
+            }
     }
 
     @Override

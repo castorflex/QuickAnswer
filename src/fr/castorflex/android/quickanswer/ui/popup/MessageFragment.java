@@ -149,7 +149,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void initViews() {
-        mContact = ContactProvider.getInstance().getContact(mIdSender, getActivity());
+        mContact = ContactProvider.getInstance().getContactByPhoneNumber(mIdSender, getActivity());
         QuickContactBadge badge = (QuickContactBadge) mActionbar.findViewById(R.id.imageView_actionbar);
         if (mContact == null)
             mContact = new Contact(getString(R.string.unknown), mIdSender, null);

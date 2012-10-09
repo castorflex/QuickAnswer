@@ -139,7 +139,7 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
 
         List<Message> messages = b.getParcelableArrayList("listpdus");
         for (Message msg : messages) {
-            msg.setContact(ContactProvider.getInstance().getContact(msg.getSender(), this));
+            msg.setContact(ContactProvider.getInstance().getContactByPhoneNumber(msg.getSender(), this));
             mPagerAdapter.addSmsMessage(msg);
         }
     }
