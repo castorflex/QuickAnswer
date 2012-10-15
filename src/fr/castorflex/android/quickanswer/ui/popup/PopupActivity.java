@@ -182,7 +182,6 @@ public class PopupActivity extends FragmentActivity implements TextWatcher, View
             }, mNewScroller.getScrollerDuration());
 
         }
-
     }
 
     //////////////////////IMPLEMENTS/////////////////////////////////////////////////

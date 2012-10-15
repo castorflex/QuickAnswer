@@ -113,6 +113,11 @@ public class MessagesAdapter extends BaseAdapter {
                         sendIntent.putExtra("address", item.getSender());
                         sendIntent.setType("vnd.android-dir/mms-sms");
                         mContext.startActivity(sendIntent);
+
+                        if(mContext instanceof PopupActivity){
+                            ((PopupActivity)mContext).removeFragment(item.getSender());
+                        }
+
                     }
                 });
                 break;
