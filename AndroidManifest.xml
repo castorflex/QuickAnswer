@@ -36,6 +36,7 @@
                   android:label="PopupActivity"
                   android:theme="@style/NoTitleDialog"
                   android:launchMode="singleInstance"
+                  android:clearTaskOnLaunch="true"
                   android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
 
