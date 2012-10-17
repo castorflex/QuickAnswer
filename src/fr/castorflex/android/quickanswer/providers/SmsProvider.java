@@ -31,7 +31,7 @@ public class SmsProvider {
                         setSmsAsRead(context, msg);
                 }
             }
-        }, 1000);
+        }, 4000);
 
     }
 

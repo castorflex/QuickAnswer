@@ -154,7 +154,7 @@ public class SMSReceiver extends BroadcastReceiver {
     private void addMMSToStack() {
         Thread.currentThread();
         try {
-            Thread.sleep(500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
