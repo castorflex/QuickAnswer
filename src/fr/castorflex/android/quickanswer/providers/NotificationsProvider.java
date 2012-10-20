@@ -193,7 +193,7 @@ public abstract class NotificationsProvider {
             Notification notification = new Notification.Builder(context)
                     .setSmallIcon(R.drawable.ic_notif)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-                    .setContentText(context.getText(R.string.message_sent))
+                    .setContentTitle(context.getText(R.string.message_sent))
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent)
                     .getNotification();
@@ -220,7 +220,7 @@ public abstract class NotificationsProvider {
             Notification notification = new Notification.Builder(context)
                     .setSmallIcon(R.drawable.ic_notif)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-                    .setContentText(context.getText(R.string.message_sending))
+                    .setContentTitle(context.getText(R.string.message_sending))
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent)
                     .getNotification();
