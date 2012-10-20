@@ -41,7 +41,7 @@ public abstract class ContactProvider {
 
     public static class ContactProviderV7 extends ContactProvider {
 
-        private ContactProviderV7() {
+        public ContactProviderV7() {
         }
 
         @Override
@@ -103,7 +103,7 @@ public abstract class ContactProvider {
 
     public static class ContactProviderV11 extends ContactProvider {
 
-        private ContactProviderV11() {
+        public ContactProviderV11() {
         }
 
 
