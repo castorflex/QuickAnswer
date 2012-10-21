@@ -135,10 +135,16 @@ public class SMSReceiver extends BroadcastReceiver {
         }
     }
 
-    private void notifyPopup(Context context) {
+    private void notifyPopup(final Context context) {
 
         if (!Utils.isLocked(context)) {
-            NotificationsProvider.getInstance().clearReceived(context);
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    NotificationsProvider.getInstance().clearReceived(context);
+                }
+            }, 1000);
 
             ArrayList<Message> messageArrayList = MessageProvider.getStoredMessages(context);
             if (messageArrayList != null && messageArrayList.size() > 0) {

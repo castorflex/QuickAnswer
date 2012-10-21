@@ -12,7 +12,6 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Vibrator;
 import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.pojos.Message;
 
@@ -144,26 +143,26 @@ public abstract class NotificationsProvider {
 
                 notification.setLatestEventInfo(context, context.getString(
                         R.string.message_received), contentStr, contentIntent);
-                nm.notify(NOTIF_RECEIVED, notification);
+
 
                 //vibrate
                 if (SettingsProvider.isVibrateEnabled(context)) {
                     if (!(((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode()
                             == AudioManager.RINGER_MODE_SILENT)) {
-                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                         long[] pattern = new long[]{0, 300, 200, 300, 200};
-                        v.vibrate(pattern, -1);
+                        notification.vibrate = pattern;
                     }
                 }
 
                 //ringtone
                 if (SettingsProvider.isRingtoneEnabled(context)) {
                     try {
-                        Ringtone r = RingtoneManager.getRingtone(context, SettingsProvider.getRingtoneUri(context));
-                        r.play();
+                        notification.sound = SettingsProvider.getRingtoneUri(context);
                     } catch (Exception e) {
                     }
                 }
+
+                nm.notify(NOTIF_RECEIVED, notification);
             }
         }
 
@@ -196,6 +195,7 @@ public abstract class NotificationsProvider {
                     .setContentTitle(context.getText(R.string.message_sent))
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent)
+                    .setTicker(context.getText(R.string.message_sent))
                     .getNotification();
 
 
@@ -223,6 +223,7 @@ public abstract class NotificationsProvider {
                     .setContentTitle(context.getText(R.string.message_sending))
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent)
+                    .setTicker(context.getText(R.string.message_sending))
                     .getNotification();
 
             nm.notify(NOTIF_SENDING, notification);
@@ -253,36 +254,34 @@ public abstract class NotificationsProvider {
                 Intent notificationIntent = new Intent("fr.castorflex.android.quickanswer.action.unknownIntent");
                 PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0);
 
-                Notification notification = new Notification.Builder(context)
+                Notification.Builder builder = new Notification.Builder(context)
                         .setSmallIcon(R.drawable.ic_notif)
                         .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
                         .setContentTitle(context.getText(R.string.message_received))
                         .setContentText(contentStr)
                         .setAutoCancel(true)
                         .setContentIntent(contentIntent)
-                        .getNotification();
+                        .setTicker(context.getText(R.string.message_received));
 
-
-                nm.notify(NOTIF_RECEIVED, notification);
 
                 //vibrate
                 if (SettingsProvider.isVibrateEnabled(context)) {
                     if (!(((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode()
                             == AudioManager.RINGER_MODE_SILENT)) {
-                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                         long[] pattern = new long[]{0, 300, 200, 300, 200};
-                        v.vibrate(pattern, -1);
+                        builder.setVibrate(pattern);
                     }
                 }
 
                 //ringtone
                 if (SettingsProvider.isRingtoneEnabled(context)) {
                     try {
-                        Ringtone r = RingtoneManager.getRingtone(context, SettingsProvider.getRingtoneUri(context));
-                        r.play();
+                        builder.setSound(SettingsProvider.getRingtoneUri(context));
                     } catch (Exception e) {
                     }
                 }
+
+                nm.notify(NOTIF_RECEIVED, builder.getNotification());
             }
         }
 
