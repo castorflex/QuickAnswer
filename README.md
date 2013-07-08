@@ -1,3 +1,8 @@
+WARNING
+=======
+
+This app is no longer developed, this is not really interesting.
+
 Quick Answer
 ==================
 
