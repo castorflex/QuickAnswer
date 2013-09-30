@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="fr.castorflex.android.quickanswer"
-          android:versionCode="15"
+          android:versionCode="16"
           android:versionName="0.3.11 beta">
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18"/>
 
     <uses-permission android:name="android.permission.RECEIVE_MMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
