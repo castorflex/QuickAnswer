@@ -24,7 +24,7 @@
         <activity android:name=".ui.settings.SettingsActivity"
                   android:label="@string/app_name"
                   android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
+                  android:theme="@style/qatheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -43,7 +43,7 @@
         <activity android:name=".ui.settings.QuickAnswersActivity"
                   android:label="Quick Answers"
                   android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:theme="@style/Theme.Sherlock.Light.DarkActionBar"/>
+                  android:theme="@style/qatheme"/>
 
         <receiver android:name=".receivers.SMSReceiver">
             <intent-filter android:priority="1000">

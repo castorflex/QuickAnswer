@@ -1,11 +1,15 @@
 package fr.castorflex.android.quickanswer.ui.settings;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -22,7 +26,7 @@ import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
  * Time: 15:33
  * To change this template use File | Settings | File Templates.
  */
-public class QuickAnswersActivity extends com.actionbarsherlock.app.SherlockActivity {
+public class QuickAnswersActivity extends Activity {
 
     private ListView mListView;
     private QuickAnswersAdapter mAdapter;
@@ -37,20 +41,20 @@ public class QuickAnswersActivity extends com.actionbarsherlock.app.SherlockActi
         mAdapter = new QuickAnswersAdapter(this);
         mListView.setAdapter(mAdapter);
 
-        getSupportActionBar().setIcon(R.drawable.ic_launcher);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setIcon(R.drawable.ic_launcher);
+      getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-        com.actionbarsherlock.view.MenuInflater inflater = getSherlock().getMenuInflater();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_settings_qa, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, com.actionbarsherlock.view.MenuItem item) {
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new:
                 showEditDialog(-1, null);

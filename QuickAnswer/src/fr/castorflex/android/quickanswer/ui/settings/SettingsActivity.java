@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.RingtonePreference;
 import android.text.util.Linkify;
 import android.view.ContextThemeWrapper;
@@ -17,7 +18,7 @@ import fr.castorflex.android.quickanswer.R;
 import fr.castorflex.android.quickanswer.providers.SettingsProvider;
 import fr.castorflex.android.quickanswer.utils.MeasuresUtils;
 
-public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
 
     /**
      * Called when the activity is first created.

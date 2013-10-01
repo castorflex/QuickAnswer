@@ -37,9 +37,6 @@ public abstract class NotificationsProvider {
         if (instance == null) {
             synchronized (NotificationsProvider.class) {
                 if (instance == null) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-                        instance = new NotificationsProviderV7();
-                    else
                         instance = new NotificationsProviderV11();
                 }
             }
@@ -55,119 +52,6 @@ public abstract class NotificationsProvider {
 
     public abstract void clearReceived(Context context);
 
-
-    public static class NotificationsProviderV7 extends NotificationsProvider {
-
-        public NotificationsProviderV7() {
-        }
-
-        public void clearReceived(Context context) {
-            final NotificationManager nm = getNotificationManager(context);
-            nm.cancel(NOTIF_RECEIVED);
-        }
-
-        private NotificationManager getNotificationManager(Context context) {
-            return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-
-        public void notifySent(Context context) {
-            final NotificationManager nm = getNotificationManager(context);
-
-            final Notification notification = new Notification(
-                    R.drawable.ic_notif,
-                    context.getString(R.string.message_sent),
-                    System.currentTimeMillis());
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            Intent notificationIntent = new Intent("fr.castorflex.android.quickanswer.action.unknownIntent");
-            PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0);
-
-            notification.setLatestEventInfo(context, "", "", contentIntent);
-            nm.notify(NOTIF_SENT, notification);
-
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    nm.cancel(NOTIF_SENT);
-                }
-            }, 1000);
-        }
-
-        public void notifySending(Context context) {
-            final NotificationManager nm = getNotificationManager(context);
-
-            final Notification notification = new Notification(
-                    R.drawable.ic_notif,
-                    context.getString(R.string.message_sending),
-                    System.currentTimeMillis());
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-            Intent notificationIntent = new Intent("fr.castorflex.android.quickanswer.action.unknownIntent");
-            PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0);
-
-            notification.setLatestEventInfo(context, "", "", contentIntent);
-            nm.notify(NOTIF_SENDING, notification);
-
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    nm.cancel(NOTIF_SENDING);
-                }
-            }, 1000);
-        }
-
-
-        public void notifySmsReceived(Context context) {
-            if (SettingsProvider.isNotifEnabled(context)) {
-                //statusbar
-                List<Message> list = MessageProvider.getStoredMessages(context);
-                int nb = list == null ? 0 : list.size();
-
-                if (nb == 0)
-                    return;
-
-                String contentStr = nb == 1 ? context.getString(R.string.new_message_1) :
-                        String.format(context.getString(R.string.new_message_x), nb);
-
-                final NotificationManager nm = getNotificationManager(context);
-
-                final Notification notification = new Notification(
-                        R.drawable.ic_notif,
-                        context.getString(R.string.message_received),
-                        System.currentTimeMillis());
-
-                Intent notificationIntent = new Intent("fr.castorflex.android.quickanswer.action.unknownIntent");
-                PendingIntent contentIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, 0);
-
-                notification.setLatestEventInfo(context, context.getString(
-                        R.string.message_received), contentStr, contentIntent);
-
-
-                //vibrate
-                if (SettingsProvider.isVibrateEnabled(context)) {
-                    if (!(((AudioManager) context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode()
-                            == AudioManager.RINGER_MODE_SILENT)) {
-                        long[] pattern = new long[]{0, 300, 200, 300, 200};
-                        notification.vibrate = pattern;
-                    }
-                }
-
-                //ringtone
-                if (SettingsProvider.isRingtoneEnabled(context)) {
-                    try {
-                        notification.sound = SettingsProvider.getRingtoneUri(context);
-                    } catch (Exception e) {
-                    }
-                }
-
-                nm.notify(NOTIF_RECEIVED, notification);
-            }
-        }
-
-
-    }
 
     public static class NotificationsProviderV11 extends NotificationsProvider {
 
